@@ -9,7 +9,7 @@ export default function TabLayout() {
         headerShown: false,
       }}
     >
-      <Tabs.Screen
+      <Tabs.Screen 
         name="index"
         options={{
           title: "Home",

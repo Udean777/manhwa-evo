@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: radius._17,
   },
   button: {
-    backgroundColor: colors.neutral100,
+    backgroundColor: colors.primary,
     borderRadius: radius._17,
     borderWidth: 1,
     height: verticalScale(52),

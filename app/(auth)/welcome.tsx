@@ -1,6 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React from "react";
-import { Image } from "expo-image";
 import { colors, fonts, spacingX, spacingY } from "@/constants/theme";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { verticalScale } from "@/utils/style";
@@ -75,7 +74,7 @@ const Page = () => {
             .springify()
             .damping(12)}
         >
-          <CustomButton onPress={() => router.push("/(auth)/auth_screen")}>
+          <CustomButton onPress={() => router.push("/(auth)/login_screen")}>
             <Typography
               size={17}
               color={colors.black}
