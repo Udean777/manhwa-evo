@@ -1,23 +1,30 @@
-import { Tabs } from "expo-router";
-import React from "react";
+import { Tabs, useRouter } from "expo-router";
+import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import CustomTabBar from "@/components/CustomTabBar";
+import { useAuth } from "@/context/authContext";
 
 export default function TabLayout() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
+
   return (
     <Tabs
-      screenOptions={{
-        headerShown: false,
-      }}
+      tabBar={(props) => (
+        <CustomTabBar
+          {...props}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          user={user}
+          router={router}
+        />
+      )}
+      screenOptions={{ headerShown: false }}
     >
-      <Tabs.Screen 
-        name="index"
-        options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => (
-            <Ionicons size={28} name="home" color={color} />
-          ),
-        }}
-      />
+      <Tabs.Screen name="index" />
+      <Tabs.Screen name="bookmark" />
+      <Tabs.Screen name="profile" />
     </Tabs>
   );
 }

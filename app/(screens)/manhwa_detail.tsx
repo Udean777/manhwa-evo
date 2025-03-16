@@ -1,98 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   ScrollView,
   Image,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
   FlatList,
 } from "react-native";
-import axios from "axios";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { fonts } from "@/constants/theme";
-import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import * as Icons from "phosphor-react-native";
 import Error from "@/components/Error";
 import Loading from "@/components/Loading";
-
-interface ManhwaDetail {
-  id: string;
-  title: string;
-  imageSrc: string;
-  rating: string;
-  followedBy: string;
-  status: string;
-  type: string;
-  released: string;
-  updatedOn: string;
-  author: string;
-  artist: string;
-  alternative: string;
-  synopsis: string;
-  genres: { genreName: string }[];
-  chapters: { chapterNum: string; chapterDate: string }[];
-}
+import ChapterItem from "@/components/ChapterItem";
+import useFetchData from "@/hooks/useFetchData";
+import { ManhwaDetail } from "@/utils/types";
+import ListChapter from "@/components/ListChapter";
 
 const Page = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [manhwaDetail, setManhwaDetail] = useState<ManhwaDetail | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { manhwaId } = useLocalSearchParams<{ manhwaId: string }>();
-  const router = useRouter();
 
-  const fetchManhwaDetail = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `https://kurokami.vercel.app/api/manhwa-detail/${manhwaId}`
-      );
-      setManhwaDetail(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching manhwa detail:", err);
-      setError("Failed to load manhwa details");
-      setLoading(false);
-    }
-  };
+  // console.log("Fetching manhwaId:", manhwaId);
 
-  useEffect(() => {
-    fetchManhwaDetail();
-  }, [manhwaId]);
+  const {
+    data: manhwaDetail,
+    error,
+    isLoading,
+  } = useFetchData<ManhwaDetail | null>(`/api/manhwa-detail/${manhwaId}`);
 
-  const renderGenreBadge = ({ item }: any) => (
-    <TouchableOpacity style={styles.genreBadge}>
-      <Typography style={styles.genreText}>{item.genreName}</Typography>
-    </TouchableOpacity>
-  );
+  // console.log(manhwaDetail)
 
-  const renderChapterItem = ({ item }: any) => (
-    <TouchableOpacity
-      style={styles.chapterItem}
-      onPress={() => {
-        router.push({
-          pathname: "/reading_screen",
-          params: {
-            chapterLink: item.chapterLink,
-          },
-        });
-        // console.log(item.chapterLink);
-      }}
-    >
-      <View style={styles.chapterInfoContainer}>
-        <Typography style={styles.chapterTitle}>{item.chapterNum}</Typography>
-        <Typography style={styles.chapterDate}>{item.chapterDate}</Typography>
-      </View>
-      <TouchableOpacity style={styles.downloadButton}>
-        <Ionicons name="download-outline" size={20} color="#0286FF" />
-      </TouchableOpacity>
-    </TouchableOpacity>
-  );
-
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
 
@@ -100,9 +41,9 @@ const Page = () => {
     return (
       <Error
         onRefresh={() => {
-          setError(null);
-          setLoading(true);
-          fetchManhwaDetail();
+          // setError(null);
+          // setLoading(true);
+          // fetchManhwaDetail();
         }}
         error={error}
       />
@@ -126,7 +67,7 @@ const Page = () => {
           <View style={styles.headerInfo}>
             <Typography style={styles.title}>{manhwaDetail?.title}</Typography>
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Icons.Star weight="fill" size={16} color="#FFD700" />
               <Typography style={styles.rating}>
                 {manhwaDetail?.rating}
               </Typography>
@@ -191,7 +132,13 @@ const Page = () => {
           <Typography style={styles.sectionTitle}>Genres</Typography>
           <FlatList
             data={manhwaDetail?.genres}
-            renderItem={renderGenreBadge}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={styles.genreBadge}>
+                <Typography style={styles.genreText}>
+                  {item.genreName}
+                </Typography>
+              </TouchableOpacity>
+            )}
             keyExtractor={(item) => item.genreName}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -199,29 +146,13 @@ const Page = () => {
           />
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.chapterHeaderRow}>
-            <Typography style={styles.sectionTitle}>Chapters</Typography>
-            <View style={styles.chapterControls}>
-              <TouchableOpacity style={styles.sortButton}>
-                <Ionicons name="filter-outline" size={20} color="#333" />
-                <Typography style={styles.sortButtonText}>Sort</Typography>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <FlatList
-            data={manhwaDetail?.chapters.slice(0, 10)}
-            renderItem={renderChapterItem}
-            keyExtractor={(item) => item.chapterNum}
-            scrollEnabled={false}
-          />
-        </View>
+        <ListChapter manhwaDetail={manhwaDetail} />
       </ScrollView>
     </ScreenWrapper>
   );
 };
 
-export default Page
+export default Page;
 
 const styles = StyleSheet.create({
   container: {
@@ -284,7 +215,7 @@ const styles = StyleSheet.create({
     width: 70,
     fontSize: 13,
     color: "#666",
-    fontFamily: fonts.PoppinsMedium,
+    fontFamily: fonts.PoppinsBold,
   },
   detailValue: {
     flex: 1,
@@ -335,52 +266,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#333",
     fontFamily: fonts.PoppinsMedium,
-  },
-  chapterHeaderRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  chapterControls: {
-    flexDirection: "row",
-  },
-  sortButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
-    backgroundColor: "#f0f0f0",
-  },
-  sortButtonText: {
-    fontSize: 12,
-    color: "#333",
-    marginLeft: 4,
-    fontFamily: fonts.PoppinsMedium,
-  },
-  chapterItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
-  },
-  chapterInfoContainer: {
-    flex: 1,
-  },
-  chapterTitle: {
-    fontSize: 14,
-    color: "#333",
-    fontFamily: fonts.PoppinsMedium,
-  },
-  chapterDate: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 2,
-  },
-  downloadButton: {
-    padding: 8,
   },
 });

@@ -17,6 +17,12 @@ const DetailLayout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="search_results"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

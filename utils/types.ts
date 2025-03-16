@@ -1,6 +1,4 @@
-import {
-  ViewStyle,
-} from "react-native";
+import { ViewStyle } from "react-native";
 
 export type ImageUploadProps = {
   file?: any;
@@ -28,3 +26,29 @@ export type ResponseType = {
   data?: any;
   msg?: string;
 };
+
+export type ManhwaProps = {
+  title: string;
+  chapter: string;
+  rating: string;
+  imageSrc: string;
+  link: string;
+};
+
+export interface ManhwaDetail {
+  id: string;
+  title: string;
+  imageSrc: string;
+  rating: string;
+  followedBy: string;
+  status: string;
+  type: string;
+  released: string;
+  updatedOn: string;
+  author: string;
+  artist: string;
+  alternative: string;
+  synopsis: string;
+  genres: { genreName: string }[];
+  chapters: { chapterNum: string; chapterDate: string }[];
+}

@@ -3,14 +3,12 @@ import {
   Dimensions,
   FlatList,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { fonts } from "@/constants/theme";
-import axios from "axios";
 import { Image } from "expo-image";
 import Typography from "@/components/Typography";
 import Loading from "@/components/Loading";
@@ -18,6 +16,7 @@ import Error from "@/components/Error";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Header from "@/components/Header";
 import * as Icons from "phosphor-react-native";
+import useFetchData from "@/hooks/useFetchData";
 
 interface ChapterData {
   title: string;
@@ -26,12 +25,9 @@ interface ChapterData {
   nextChapter: string | null;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 const Page = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [chapterData, setChapterData] = useState<ChapterData | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
   const [imageDimensions, setImageDimensions] = useState<
     Record<number, { width: number; height: number }>
@@ -49,26 +45,13 @@ const Page = () => {
     return path.endsWith("/") ? path.slice(0, -1) : path;
   };
 
-  const fetchChapterData = async () => {
-    try {
-      setIsLoading(true);
-      setLoadedImages({});
-      setImageDimensions({});
+  const chapterId = getChapterId(chapterLink || "");
 
-      const chapterId = getChapterId(chapterLink || "");
-
-      const res = await axios.get(
-        `https://kurokami.vercel.app/api/chapter/${chapterId}`
-      );
-
-      setChapterData(res.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching chapter data:", error);
-      setError("Failed to load chapter");
-      setIsLoading(false);
-    }
-  };
+  const {
+    data: chapterData,
+    isLoading,
+    error,
+  } = useFetchData<ChapterData | null>(`/api/chapter/${chapterId}`);
 
   const prefetchImage = (index: number[]) => {
     if (!chapterData?.images) return;
@@ -83,7 +66,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    fetchChapterData();
+    // fetchChapterData();
 
     if (flatListRef.current) {
       flatListRef.current.scrollToOffset({ offset: 0, animated: false });
@@ -145,9 +128,7 @@ const Page = () => {
         {!loadedImages[index] && (
           <View style={[styles.loadingOverlay, { height: calculatedHeight }]}>
             <ActivityIndicator size="large" color="#0286FF" />
-            <Typography style={styles.loadingText}>
-              Loading image {index + 1}...
-            </Typography>
+            <Typography style={styles.loadingText}>Loading image...</Typography>
           </View>
         )}
 
@@ -184,9 +165,9 @@ const Page = () => {
     return (
       <Error
         onRefresh={() => {
-          setError(null);
-          setIsLoading(true);
-          fetchChapterData();
+          // setError(null);
+          // setIsLoading(true);
+          // fetchChapterData();
         }}
         error={error}
       />
@@ -246,7 +227,9 @@ const Page = () => {
                 onPress={handleNextChapter}
                 disabled={!chapterData?.nextChapter}
               >
-                <Typography style={styles.navButtonText}>Selanjutnya</Typography>
+                <Typography style={styles.navButtonText}>
+                  Selanjutnya
+                </Typography>
                 <Icons.ArrowRight
                   size={24}
                   color={chapterData?.nextChapter ? "#FFF" : "#AAA"}

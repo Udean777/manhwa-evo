@@ -1,17 +1,21 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Keyboard,
 } from "react-native";
 import * as Icons from "phosphor-react-native";
 import { useAuth } from "@/context/authContext";
-import {Image} from "expo-image"
+import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
+import { useRouter } from "expo-router";
 
 const HomeHeader = () => {
-  const {user} = useAuth()
+  const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <View style={styles.headerContainer}>
@@ -35,21 +39,22 @@ const HomeHeader = () => {
         </View>
 
         <TouchableOpacity style={styles.iconButton}>
-          <Icons.GridFour size={24} color="#333" />
+          <Icons.Gear size={24} color="#333" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.searchBar}>
+      <TouchableOpacity
+        onPress={() => router.push("/search_results")}
+        style={styles.searchBar}
+      >
         <Icons.MagnifyingGlass size={20} color="#666" />
         <TextInput
           placeholder="Search manga"
           style={styles.searchInput}
           placeholderTextColor="#999"
+          editable={false}
         />
-        <TouchableOpacity>
-          <Icons.SlidersHorizontal size={22} color="#666" />
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -126,5 +131,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
     color: "#333",
+  },
+  clearButton: {
+    padding: 4,
+    marginRight: 8,
   },
 });

@@ -1,11 +1,12 @@
+import Error from "@/components/Error";
 import HomeHeader from "@/components/HomeHeader";
+import Loading from "@/components/Loading";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import { fonts } from "@/constants/theme";
-import { useAuth } from "@/context/authContext";
-import axios from "axios";
+import useFetchData from "@/hooks/useFetchData";
+import { ManhwaProps } from "@/utils/types";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -14,32 +15,11 @@ import {
   StyleSheet,
 } from "react-native";
 
-type ManhwaProps = {
-  title: string;
-  chapter: string;
-  rating: string;
-  imageSrc: string;
-  link: string;
-};
-
 export default function HomeScreen() {
-  const [data, setData] = useState<ManhwaProps[]>([]);
+  const { data, isLoading, error } = useFetchData<ManhwaProps[]>(
+    "/api/manhwa-popular"
+  );
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchManhwaPopular = async () => {
-      try {
-        const response = await axios.get(
-          "https://kurokami.vercel.app/api/manhwa-popular"
-        );
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-
-    fetchManhwaPopular();
-  }, []);
 
   const handleManhwaPress = (item: any) => {
     const linkParts = item.link.split("/");
@@ -50,13 +30,21 @@ export default function HomeScreen() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error onRefresh={() => {}} error={error} />;
+  }
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         <HomeHeader />
 
         <FlatList
-          data={data.slice(0, 5)}
+          data={data?.slice(0, 5)}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
