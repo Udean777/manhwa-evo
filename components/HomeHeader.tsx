@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Keyboard,
 } from "react-native";
 import * as Icons from "phosphor-react-native";
 import { useAuth } from "@/context/authContext";
 import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
 import { useRouter } from "expo-router";
+import { getGreeting } from "@/utils/common";
 
 const HomeHeader = () => {
   const { user } = useAuth();
@@ -28,12 +28,9 @@ const HomeHeader = () => {
               transition={500}
               style={styles.avatar}
             />
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>3</Text>
-            </View>
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.subtitle}>Stay trending!</Text>
+            <Text style={styles.subtitle}>{getGreeting()}</Text>
             <Text style={styles.username}>{user?.username}</Text>
           </View>
         </View>

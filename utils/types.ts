@@ -9,6 +9,13 @@ export type ImageUploadProps = {
   placeholder?: string;
 };
 
+export type accountOptionType = {
+  title: string;
+  icon: React.ReactNode;
+  bgColor: string;
+  routeName?: any;
+};
+
 export type UserType = {
   uid?: string;
   email?: string | null;
