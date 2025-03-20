@@ -5,3 +5,11 @@ export const getGreeting = () => {
   if (hour < 18) return "Selamat Sore!";
   return "Selamat Malam!";
 };
+
+export const getChapterId = (url: string) => {
+  if (!url) return "";
+
+  const path = url.replace("https://komikstation.co/", "");
+
+  return path.endsWith("/") ? path.slice(0, -1) : path;
+};

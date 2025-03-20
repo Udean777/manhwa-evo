@@ -1,19 +1,13 @@
 import Error from "@/components/Error";
 import HomeHeader from "@/components/HomeHeader";
 import Loading from "@/components/Loading";
+import ManhwaCard from "@/components/ManhwaCard";
+import PopularCard from "@/components/PopularCard";
 import ScreenWrapper from "@/components/ScreenWrapper";
-import Typography from "@/components/Typography";
-import { fonts } from "@/constants/theme";
 import useFetchData from "@/hooks/useFetchData";
 import { ManhwaProps } from "@/utils/types";
 import { useRouter } from "expo-router";
-import {
-  View,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-} from "react-native";
+import { FlatList, StyleSheet, ScrollView, View } from "react-native";
 
 export default function HomeScreen() {
   const { data, isLoading, error } = useFetchData<ManhwaProps[]>(
@@ -40,41 +34,36 @@ export default function HomeScreen() {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 80,
+        }}
+        style={styles.container}
+      >
         <HomeHeader />
 
         <FlatList
           data={data?.slice(0, 5)}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.title}
           horizontal
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View>
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => handleManhwaPress(item)}
-              >
-                <Image source={{ uri: item.imageSrc }} style={styles.image} />
-                <View style={styles.textContainer}>
-                  <Typography
-                    style={styles.title}
-                    textProps={{
-                      numberOfLines: 1,
-                      ellipsizeMode: "tail",
-                    }}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Typography style={styles.chapter}>{item.chapter}</Typography>
-                  <Typography style={styles.rating}>
-                    ⭐ {item.rating}
-                  </Typography>
-                </View>
-              </TouchableOpacity>
-            </View>
+          renderItem={({ item, index }) => (
+            <PopularCard item={item} index={index} />
           )}
+          ItemSeparatorComponent={() => (
+            <View
+              style={{
+                width: 16,
+              }}
+            />
+          )}
+          contentContainerStyle={{ gap: 26 }}
+          style={{
+            marginTop: 12,
+            marginBottom: 16,
+          }}
         />
-      </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }
@@ -84,44 +73,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
-  },
-  card: {
-    width: 140,
-    marginRight: 12,
-    backgroundColor: "#f8f8f8",
-    padding: 8,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  image: {
-    width: 120,
-    height: 160,
-    borderRadius: 6,
-  },
-  textContainer: {
-    width: "100%",
-    marginTop: 8,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 14,
-    fontFamily: fonts.PoppinsBold,
-    textAlign: "center",
-    color: "#333",
-    maxWidth: 120,
-    lineHeight: 18,
-    height: 36,
-    overflow: "hidden",
-  },
-  chapter: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 2,
-  },
-  rating: {
-    fontSize: 12,
-    fontFamily: fonts.PoppinsSemiBold,
-    color: "#0286FF",
-    marginTop: 2,
   },
 });

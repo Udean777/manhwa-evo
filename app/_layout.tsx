@@ -31,11 +31,18 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(screens)" options={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(screens)" />
+        <Stack.Screen name={"manhwa/[id]"} />
+        <Stack.Screen name={"manhwa/[id]/all_chapters"} />
+        <Stack.Screen name={"manhwa/[id]/reading_screen"} />
       </Stack>
     </AuthProvider>
   );

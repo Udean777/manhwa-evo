@@ -1,34 +1,27 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Typography from "./Typography";
 import * as Icons from "phosphor-react-native";
 import { colors, fonts } from "@/constants/theme";
+import { getChapterId } from "@/utils/common";
 
 const ChapterItem = ({ item }: any) => {
-  const router = useRouter();
-
   return (
-    <TouchableOpacity
-      style={styles.chapterItem}
-      onPress={() => {
-        router.push({
-          pathname: "/reading_screen",
-          params: {
-            chapterLink: item.chapterLink,
-          },
-        });
-        // console.log(item.chapterLink);
-      }}
+    <Link
+      href={`/manhwa/${getChapterId(item.chapterLink)}/reading_screen`}
+      asChild
     >
-      <View style={styles.chapterInfoContainer}>
-        <Typography style={styles.chapterTitle}>{item.chapterNum}</Typography>
-        <Typography style={styles.chapterDate}>{item.chapterDate}</Typography>
-      </View>
-      <TouchableOpacity style={styles.downloadButton}>
-        <Icons.CaretRight size={20} color={colors.neutral900} weight="bold" />
+      <TouchableOpacity style={styles.chapterItem}>
+        <View style={styles.chapterInfoContainer}>
+          <Typography style={styles.chapterTitle}>{item.chapterNum}</Typography>
+          <Typography style={styles.chapterDate}>{item.chapterDate}</Typography>
+        </View>
+        <TouchableOpacity style={styles.downloadButton}>
+          <Icons.CaretRight size={20} color={colors.neutral900} weight="bold" />
+        </TouchableOpacity>
       </TouchableOpacity>
-    </TouchableOpacity>
+    </Link>
   );
 };
 

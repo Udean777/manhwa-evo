@@ -4,14 +4,20 @@ import Typography from "./Typography";
 import { FlatList } from "react-native";
 import ChapterItem from "./ChapterItem";
 import { fonts } from "@/constants/theme";
+import { useRouter } from "expo-router";
 
-const ListChapter = ({ manhwaDetail }: any) => {
+const ListChapter = ({ manhwaDetail, manhwaId }: any) => {
+  const router = useRouter();
+
   return (
     <View style={styles.section}>
       <View style={styles.chapterHeaderRow}>
         <Typography style={styles.sectionTitle}>Chapters</Typography>
         <View style={styles.chapterControls}>
-          <TouchableOpacity style={styles.viewAll}>
+          <TouchableOpacity
+            style={styles.viewAll}
+            onPress={() => router.push(`/manhwa/${manhwaId}/all_chapters`)}
+          >
             <Typography style={styles.viewAllText}>Lihat Semua</Typography>
           </TouchableOpacity>
         </View>

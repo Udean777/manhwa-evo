@@ -17,6 +17,7 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import Header from "@/components/Header";
 import * as Icons from "phosphor-react-native";
 import useFetchData from "@/hooks/useFetchData";
+import { getChapterId } from "@/utils/common";
 
 interface ChapterData {
   title: string;
@@ -32,26 +33,16 @@ const Page = () => {
   const [imageDimensions, setImageDimensions] = useState<
     Record<number, { width: number; height: number }>
   >({});
-  const { chapterLink } = useLocalSearchParams<{ chapterLink: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const flatListRef = useRef<FlatList>(null);
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
-
-  const getChapterId = (url: string) => {
-    if (!url) return "";
-
-    const path = url.replace("https://komikstation.co/", "");
-
-    return path.endsWith("/") ? path.slice(0, -1) : path;
-  };
-
-  const chapterId = getChapterId(chapterLink || "");
 
   const {
     data: chapterData,
     isLoading,
     error,
-  } = useFetchData<ChapterData | null>(`/api/chapter/${chapterId}`);
+  } = useFetchData<ChapterData | null>(`/api/chapter/${getChapterId(id)}`);
 
   const prefetchImage = (index: number[]) => {
     if (!chapterData?.images) return;
@@ -71,7 +62,7 @@ const Page = () => {
     if (flatListRef.current) {
       flatListRef.current.scrollToOffset({ offset: 0, animated: false });
     }
-  }, [chapterLink]);
+  }, [id]);
 
   useEffect(() => {
     if (visibleIndexes.length > 0) {
@@ -83,7 +74,7 @@ const Page = () => {
     if (chapterData?.prevChapter) {
       router.push({
         pathname: "/reading_screen",
-        params: { chapterLink: chapterData.prevChapter },
+        params: { id: chapterData.prevChapter },
       });
     }
   };
@@ -92,7 +83,7 @@ const Page = () => {
     if (chapterData?.nextChapter) {
       router.push({
         pathname: "/reading_screen",
-        params: { chapterLink: chapterData.nextChapter },
+        params: { id: chapterData.nextChapter },
       });
     }
   };

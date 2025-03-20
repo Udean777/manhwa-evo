@@ -20,18 +20,16 @@ import useFetchData from "@/hooks/useFetchData";
 import { ManhwaDetail } from "@/utils/types";
 import ListChapter from "@/components/ListChapter";
 
-const Page = () => {
-  const { manhwaId } = useLocalSearchParams<{ manhwaId: string }>();
-
-  // console.log("Fetching manhwaId:", manhwaId);
+const Details = () => {
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const {
     data: manhwaDetail,
     error,
     isLoading,
-  } = useFetchData<ManhwaDetail | null>(`/api/manhwa-detail/${manhwaId}`);
+  } = useFetchData<ManhwaDetail | null>(`/api/manhwa-detail/${id}`);
 
-  // console.log(manhwaDetail)
+  //   console.log(id);
 
   if (isLoading) {
     return <Loading />;
@@ -146,13 +144,13 @@ const Page = () => {
           />
         </View>
 
-        <ListChapter manhwaDetail={manhwaDetail} />
+        <ListChapter manhwaDetail={manhwaDetail} manhwaId={id} />
       </ScrollView>
     </ScreenWrapper>
   );
 };
 
-export default Page;
+export default Details;
 
 const styles = StyleSheet.create({
   container: {

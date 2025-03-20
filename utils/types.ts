@@ -57,5 +57,5 @@ export interface ManhwaDetail {
   alternative: string;
   synopsis: string;
   genres: { genreName: string }[];
-  chapters: { chapterNum: string; chapterDate: string }[];
+  chapters: { chapterNum: string; chapterDate: string; chapterLink: string }[];
 }
