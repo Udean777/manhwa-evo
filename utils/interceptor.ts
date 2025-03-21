@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://192.168.36.12:3000", // Change to the real endpoint after deployed
+  baseURL: "https://kurokami.vercel.app", // Change to the real endpoint after deployed
 });
 
 api.interceptors.request.use(
@@ -12,7 +12,7 @@ api.interceptors.request.use(
   (error) => {
     // console.log("Request error:", eÏrror);
     return Promise.reject(error);
-  },
+  }
 );
 
 api.interceptors.response.use(
@@ -23,7 +23,7 @@ api.interceptors.response.use(
   (error) => {
     // console.error("Response error:", error.response?.data || error.message);
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;

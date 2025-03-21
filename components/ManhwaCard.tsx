@@ -2,26 +2,35 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";
-import { fonts } from "@/constants/theme";
-import { ManhwaProps } from "@/utils/types";
+import { colors, fonts } from "@/constants/theme";
+import { ManhwaOngoingProps } from "@/utils/types";
+import { Link } from "expo-router";
+import { verticalScale } from "@/utils/style";
+import { getManhwaId } from "@/utils/common";
 
-const ManhwaCard = ({
-  item,
-  handleManhwaPress,
-}: {
-  item: ManhwaProps;
-  handleManhwaPress: (item: ManhwaProps) => void;
-}) => {
+const ManhwaCard = ({ item }: { item: ManhwaOngoingProps }) => {
   return (
-    <View>
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => handleManhwaPress(item)}
-      >
-        <Image source={{ uri: item.imageSrc }} style={styles.image} />
-        <View style={styles.textContainer}>
+    <Link href={`/manhwa/${getManhwaId(item.link)}`} asChild>
+      <TouchableOpacity style={styles.card}>
+        <Image
+          source={{
+            uri: item.imageUrl
+              ? item.imageUrl
+              : "https://placehold.co/600x400/1a1a1a/FFFFFF.png",
+          }}
+          style={styles.image}
+          contentFit={"cover"}
+        />
+
+        <View
+          style={{
+            gap: 5,
+            marginTop: 10,
+          }}
+        >
           <Typography
-            style={styles.title}
+            size={verticalScale(14)}
+            fontFamily={fonts.PoppinsBold}
             textProps={{
               numberOfLines: 1,
               ellipsizeMode: "tail",
@@ -29,11 +38,28 @@ const ManhwaCard = ({
           >
             {item.title}
           </Typography>
-          <Typography style={styles.chapter}>{item.chapter}</Typography>
-          <Typography style={styles.rating}>⭐ {item.rating}</Typography>
+
+          <View style={styles.infoContainer}>
+            <Typography
+              size={verticalScale(12)}
+              fontFamily={fonts.PoppinsSemiBold}
+            >
+              {item.latestChapter}
+            </Typography>
+          </View>
+
+          <View style={styles.ratingContainer}>
+            <Typography
+              size={verticalScale(12)}
+              color={colors.blue}
+              fontFamily={fonts.PoppinsSemiBold}
+            >
+              ⭐ {item.rating}
+            </Typography>
+          </View>
         </View>
       </TouchableOpacity>
-    </View>
+    </Link>
   );
 };
 
@@ -41,42 +67,21 @@ export default ManhwaCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: 140,
-    marginRight: 12,
-    backgroundColor: "#f8f8f8",
-    padding: 8,
-    borderRadius: 8,
-    alignItems: "center",
+    width: "30%",
+    marginBottom: 10,
   },
   image: {
-    width: 120,
-    height: 160,
-    borderRadius: 6,
-  },
-  textContainer: {
     width: "100%",
-    marginTop: 8,
-    // alignItems: "center",
+    height: 208, // 52 * 4 to match h-52
+    borderRadius: 8,
   },
-  title: {
-    fontSize: 14,
-    fontFamily: fonts.PoppinsBold,
-    // textAlign: "center",
-    color: "#333",
-    maxWidth: 120,
-    lineHeight: 18,
-    // height: 36,
-    overflow: "hidden",
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  chapter: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 2,
-  },
-  rating: {
-    fontSize: 12,
-    fontFamily: fonts.PoppinsSemiBold,
-    color: "#0286FF",
-    marginTop: 2,
+  ratingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

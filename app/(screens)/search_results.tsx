@@ -12,7 +12,7 @@ import { useRouter } from "expo-router";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import Header from "@/components/Header";
-import { fonts } from "@/constants/theme";
+import { colors, fonts } from "@/constants/theme";
 import * as Icons from "phosphor-react-native";
 import { Image } from "expo-image";
 import useManhwaSearch from "@/hooks/useSearch";
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   searchButton: {
-    backgroundColor: "#0286FF",
+    backgroundColor: colors.primary,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
   paginationButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0286FF",
+    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,

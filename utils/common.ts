@@ -13,3 +13,12 @@ export const getChapterId = (url: string) => {
 
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
+
+export const getManhwaId = (link: string) => {
+  const linkParts = link?.split("/");
+  const mangaIndex = linkParts?.indexOf("manga");
+
+  return mangaIndex !== -1 && mangaIndex + 1 < linkParts?.length
+    ? linkParts[mangaIndex + 1]
+    : null;
+};

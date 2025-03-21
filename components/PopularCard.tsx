@@ -6,32 +6,16 @@ import { fonts } from "@/constants/theme";
 import { ManhwaProps } from "@/utils/types";
 import { Link } from "expo-router";
 import MaskedView from "@react-native-masked-view/masked-view";
+import { getManhwaId } from "@/utils/common";
 
-const PopularCard = ({
-  item: { title, link, imageSrc },
-  index,
-}: {
-  item: ManhwaProps;
-  index: number;
-}) => {
-  const getManhwaId = (link: string) => {
-    const linkParts = link.split("/");
-    const mangaIndex = linkParts.indexOf("manga");
-
-    return mangaIndex !== -1 && mangaIndex + 1 < linkParts.length
-      ? linkParts[mangaIndex + 1]
-      : null;
-  };
-
-  const manhwaId = getManhwaId(link);
-
+const PopularCard = ({ item: { rank, title, url, image } }: { item: any }) => {
   //   console.log(manhwaId);
 
   return (
-    <Link href={`/manhwa/${manhwaId}`} asChild>
+    <Link href={`/manhwa/${getManhwaId(url)}`} asChild>
       <TouchableOpacity style={styles.card}>
         <Image
-          source={{ uri: imageSrc }}
+          source={{ uri: image }}
           style={styles.image}
           contentFit="cover"
         />
@@ -39,7 +23,7 @@ const PopularCard = ({
         <View style={styles.rankingContainer}>
           <MaskedView
             style={styles.maskedView}
-            maskElement={<Text style={styles.rankingText}>{index + 1}</Text>}
+            maskElement={<Text style={styles.rankingText}>{rank}</Text>}
           >
             <Image
               source={require("@/assets/images/rankingGradient.png")}

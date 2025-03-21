@@ -4,66 +4,118 @@ import Loading from "@/components/Loading";
 import ManhwaCard from "@/components/ManhwaCard";
 import PopularCard from "@/components/PopularCard";
 import ScreenWrapper from "@/components/ScreenWrapper";
+import Typography from "@/components/Typography";
+import { fonts } from "@/constants/theme";
 import useFetchData from "@/hooks/useFetchData";
-import { ManhwaProps } from "@/utils/types";
-import { useRouter } from "expo-router";
+import { verticalScale } from "@/utils/style";
+import { ManhwaOngoingProps, ManhwaProps } from "@/utils/types";
 import { FlatList, StyleSheet, ScrollView, View } from "react-native";
 
 export default function HomeScreen() {
-  const { data, isLoading, error } = useFetchData<ManhwaProps[]>(
-    "/api/manhwa-popular"
-  );
-  const router = useRouter();
+  const { data, isLoading, error } = useFetchData<any[]>("/api/manhwa-top");
+  const {
+    data: ongoingManhwa,
+    isLoading: ongoingLoading,
+    error: ongoingError,
+  } = useFetchData<ManhwaOngoingProps[]>("/api/manhwa-ongoing");
 
-  const handleManhwaPress = (item: any) => {
-    const linkParts = item.link.split("/");
-    const mangaIndex = linkParts.indexOf("manga");
-    if (mangaIndex !== -1 && mangaIndex + 1 < linkParts.length) {
-      const manhwaId = linkParts[mangaIndex + 1];
-      router.push({ pathname: "/manhwa_detail", params: { manhwaId } });
-    }
-  };
+  // console.log(data);
 
-  if (isLoading) {
+  if (isLoading || ongoingLoading) {
     return <Loading />;
   }
 
-  if (error) {
+  if (error || ongoingError) {
     return <Error onRefresh={() => {}} error={error} />;
   }
 
   return (
     <ScreenWrapper>
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 80,
+      <View
+        style={{
+          flex: 1,
         }}
-        style={styles.container}
       >
-        <HomeHeader />
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: 80,
+          }}
+          style={styles.container}
+        >
+          <HomeHeader />
 
-        <FlatList
-          data={data?.slice(0, 5)}
-          keyExtractor={(item, index) => item.title}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <PopularCard item={item} index={index} />
-          )}
-          ItemSeparatorComponent={() => (
-            <View
+          <View
+            style={{
+              marginTop: 10,
+            }}
+          >
+            <Typography
+              size={verticalScale(15)}
+              fontFamily={fonts.PoppinsBold}
               style={{
-                width: 16,
+                marginBottom: 5,
+              }}
+            >
+              Manhwa Yang Lagi Populer
+            </Typography>
+
+            <FlatList
+              data={data}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <PopularCard item={item} />}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    width: 16,
+                  }}
+                />
+              )}
+              contentContainerStyle={{ gap: 26, paddingRight: 30 }}
+              style={{
+                marginTop: 12,
+                marginBottom: 16,
               }}
             />
-          )}
-          contentContainerStyle={{ gap: 26 }}
-          style={{
-            marginTop: 12,
-            marginBottom: 16,
-          }}
-        />
-      </ScrollView>
+          </View>
+
+          <View
+            style={{
+              marginTop: 10,
+            }}
+          >
+            <Typography
+              size={verticalScale(15)}
+              fontFamily={fonts.PoppinsBold}
+              style={{
+                marginBottom: 5,
+              }}
+            >
+              Manhwa Yang Lagi Ongoing
+            </Typography>
+
+            <FlatList
+              data={ongoingManhwa}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => <ManhwaCard item={item} />}
+              numColumns={3}
+              columnWrapperStyle={{
+                justifyContent: "flex-start",
+                gap: 20,
+                paddingRight: 5,
+                marginBottom: 10,
+              }}
+              style={{
+                marginTop: 8,
+                paddingBottom: 80,
+              }}
+              scrollEnabled={false}
+            />
+          </View>
+        </ScrollView>
+      </View>
     </ScreenWrapper>
   );
 }

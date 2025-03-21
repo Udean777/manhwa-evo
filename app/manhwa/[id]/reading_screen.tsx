@@ -7,8 +7,8 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { fonts } from "@/constants/theme";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { colors, fonts } from "@/constants/theme";
 import { Image } from "expo-image";
 import Typography from "@/components/Typography";
 import Loading from "@/components/Loading";
@@ -70,24 +70,6 @@ const Page = () => {
     }
   }, [visibleIndexes]);
 
-  const handlePrevChapter = () => {
-    if (chapterData?.prevChapter) {
-      router.push({
-        pathname: "/reading_screen",
-        params: { id: chapterData.prevChapter },
-      });
-    }
-  };
-
-  const handleNextChapter = () => {
-    if (chapterData?.nextChapter) {
-      router.push({
-        pathname: "/reading_screen",
-        params: { id: chapterData.nextChapter },
-      });
-    }
-  };
-
   const handleImageLoad = (index: number, event: any) => {
     const { width: naturalWidth, height: naturalHeight } = event.source;
 
@@ -118,8 +100,8 @@ const Page = () => {
       <View style={styles.imageContainer}>
         {!loadedImages[index] && (
           <View style={[styles.loadingOverlay, { height: calculatedHeight }]}>
-            <ActivityIndicator size="large" color="#0286FF" />
-            <Typography style={styles.loadingText}>Loading image...</Typography>
+            <ActivityIndicator size="large" color={colors.primary} />
+            <Typography style={styles.loadingText}>Memuat gambar...</Typography>
           </View>
         )}
 
@@ -195,37 +177,55 @@ const Page = () => {
           }}
           ListFooterComponent={
             <View style={styles.navigationContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.navButton,
-                  !chapterData?.prevChapter && styles.disabledButton,
-                ]}
-                onPress={handlePrevChapter}
-                disabled={!chapterData?.prevChapter}
-              >
-                <Icons.ArrowLeft
-                  size={24}
-                  color={chapterData?.prevChapter ? "#FFF" : "#AAA"}
-                />
-                <Typography style={styles.navButtonText}>Sebelumnya</Typography>
-              </TouchableOpacity>
+              {chapterData?.prevChapter && (
+                <Link
+                  href={`/manhwa/${getChapterId(
+                    chapterData?.prevChapter
+                  )}/reading_screen`}
+                  asChild
+                  style={[
+                    styles.navButton,
+                    !chapterData?.prevChapter && styles.disabledButton,
+                  ]}
+                >
+                  <TouchableOpacity disabled={!chapterData?.prevChapter}>
+                    <Icons.ArrowLeft
+                      size={24}
+                      color={
+                        chapterData?.prevChapter ? colors.neutral900 : "#AAA"
+                      }
+                    />
+                    <Typography style={styles.navButtonText}>
+                      Sebelumnya
+                    </Typography>
+                  </TouchableOpacity>
+                </Link>
+              )}
 
-              <TouchableOpacity
-                style={[
-                  styles.navButton,
-                  !chapterData?.nextChapter && styles.disabledButton,
-                ]}
-                onPress={handleNextChapter}
-                disabled={!chapterData?.nextChapter}
-              >
-                <Typography style={styles.navButtonText}>
-                  Selanjutnya
-                </Typography>
-                <Icons.ArrowRight
-                  size={24}
-                  color={chapterData?.nextChapter ? "#FFF" : "#AAA"}
-                />
-              </TouchableOpacity>
+              {chapterData?.nextChapter && (
+                <Link
+                  href={`/manhwa/${getChapterId(
+                    chapterData.nextChapter
+                  )}/reading_screen`}
+                  asChild
+                  style={[
+                    styles.navButton,
+                    !chapterData?.nextChapter && styles.disabledButton,
+                  ]}
+                >
+                  <TouchableOpacity disabled={!chapterData?.nextChapter}>
+                    <Typography style={styles.navButtonText}>
+                      Selanjutnya
+                    </Typography>
+                    <Icons.ArrowRight
+                      size={24}
+                      color={
+                        chapterData?.nextChapter ? colors.neutral900 : "#AAA"
+                      }
+                    />
+                  </TouchableOpacity>
+                </Link>
+              )}
             </View>
           }
         />
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#0286FF",
+    backgroundColor: colors.primary,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#333",
   },
   navButtonText: {
-    color: "#FFFFFF",
+    color: colors.neutral900,
     marginHorizontal: 8,
     fontSize: 16,
     fontFamily: fonts.PoppinsSemiBold,

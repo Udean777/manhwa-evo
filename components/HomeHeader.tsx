@@ -12,6 +12,7 @@ import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
 import { useRouter } from "expo-router";
 import { getGreeting } from "@/utils/common";
+import { colors } from "@/constants/theme";
 
 const HomeHeader = () => {
   const { user } = useAuth();
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     right: -4,
     width: 20,
     height: 20,
-    backgroundColor: "#0286FF",
+    backgroundColor: colors.primary,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",

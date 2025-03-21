@@ -3,7 +3,7 @@ import React from "react";
 import ScreenWrapper from "./ScreenWrapper";
 import { Ionicons } from "@expo/vector-icons";
 import Typography from "./Typography";
-import { fonts } from "@/constants/theme";
+import { colors, fonts } from "@/constants/theme";
 
 const Error = ({
   onRefresh,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#0286FF",
+    backgroundColor: colors.primary,
     borderRadius: 8,
   },
   retryButtonText: {

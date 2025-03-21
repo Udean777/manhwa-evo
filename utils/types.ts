@@ -42,6 +42,14 @@ export type ManhwaProps = {
   link: string;
 };
 
+export type ManhwaOngoingProps = {
+  title: string;
+  imageUrl: string;
+  link: string;
+  latestChapter: string;
+  rating: string;
+};
+
 export interface ManhwaDetail {
   id: string;
   title: string;
