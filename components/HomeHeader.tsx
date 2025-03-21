@@ -12,7 +12,8 @@ import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
 import { useRouter } from "expo-router";
 import { getGreeting } from "@/utils/common";
-import { colors } from "@/constants/theme";
+import { colors, radius } from "@/constants/theme";
+import { scale } from "@/utils/style";
 
 const HomeHeader = () => {
   const { user } = useAuth();
@@ -41,18 +42,22 @@ const HomeHeader = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        onPress={() => router.push("/search_results")}
-        style={styles.searchBar}
-      >
-        <Icons.MagnifyingGlass size={20} color="#666" />
-        <TextInput
-          placeholder="Search manga"
-          style={styles.searchInput}
-          placeholderTextColor="#999"
-          editable={false}
-        />
-      </TouchableOpacity>
+      {/* Search Bar with Shadow */}
+      <View style={styles.searchBarContainer}>
+        <View style={styles.searchBarShadow} />
+        <TouchableOpacity
+          onPress={() => router.push("/search_results")}
+          style={styles.searchBar}
+        >
+          <Icons.MagnifyingGlass size={20} color="#666" />
+          <TextInput
+            placeholder="Cari..."
+            style={styles.searchInput}
+            placeholderTextColor="#999"
+            editable={false}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -115,14 +120,31 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 8,
   },
+  searchBarContainer: {
+    position: "relative",
+    marginTop: 16,
+  },
+  searchBarShadow: {
+    position: "absolute",
+    top: scale(8),
+    left: scale(8),
+    right: scale(-4),
+    bottom: scale(-4),
+    backgroundColor: colors.black,
+    borderRadius: radius._10,
+    zIndex: 1,
+  },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
-    marginTop: 16,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    borderRadius: 12,
+    borderRadius: radius._10,
+    position: "relative",
+    zIndex: 2,
+    borderWidth: scale(2),
+    borderColor: "#1a1a1a",
   },
   searchInput: {
     flex: 1,

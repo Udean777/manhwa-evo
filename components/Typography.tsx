@@ -4,14 +4,14 @@ import { verticalScale } from "@/utils/style";
 import { colors, fonts } from "@/constants/theme";
 
 type TypoProps = {
-    size?: number;
-    color?: string;
-    fontWeight?: TextStyle["fontWeight"];
-    children: any | null;
-    style?: TextStyle;
-    textProps?: TextProps;
-    fontFamily?: TextStyle["fontFamily"];
-  };
+  size?: number;
+  color?: string;
+  fontWeight?: TextStyle["fontWeight"];
+  children: any | null;
+  style?: any;
+  textProps?: TextProps;
+  fontFamily?: TextStyle["fontFamily"];
+};
 
 const Typography = ({
   size,

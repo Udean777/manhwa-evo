@@ -3,7 +3,7 @@ import React from "react";
 import Typography from "./Typography";
 import { FlatList } from "react-native";
 import ChapterItem from "./ChapterItem";
-import { fonts } from "@/constants/theme";
+import { colors, fonts } from "@/constants/theme";
 import { useRouter } from "expo-router";
 
 const ListChapter = ({ manhwaDetail, manhwaId }: any) => {
@@ -36,7 +36,7 @@ export default ListChapter;
 
 const styles = StyleSheet.create({
   section: {
-    padding: 16,
+    // padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
   },
@@ -61,8 +61,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 6,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.white,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "#1a1a1a",
   },
   viewAllText: {
     fontSize: 12,

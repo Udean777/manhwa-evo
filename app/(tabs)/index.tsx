@@ -5,13 +5,17 @@ import ManhwaCard from "@/components/ManhwaCard";
 import PopularCard from "@/components/PopularCard";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
-import { fonts } from "@/constants/theme";
+import { colors, fonts, radius } from "@/constants/theme";
 import useFetchData from "@/hooks/useFetchData";
-import { verticalScale } from "@/utils/style";
+import { scale, verticalScale } from "@/utils/style";
 import { ManhwaOngoingProps, ManhwaProps } from "@/utils/types";
 import { FlatList, StyleSheet, ScrollView, View } from "react-native";
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { useState } from "react";
 
 export default function HomeScreen() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const { data, isLoading, error } = useFetchData<any[]>("/api/manhwa-top");
   const {
     data: ongoingManhwa,
@@ -41,8 +45,30 @@ export default function HomeScreen() {
             paddingBottom: 80,
           }}
           style={styles.container}
+          showsVerticalScrollIndicator={false}
         >
           <HomeHeader />
+
+          {/* Segmented Control with Shadow */}
+          <View style={styles.segmentContainer}>
+            <View style={styles.segmentShadow} />
+            <SegmentedControl
+              values={["Manhwa", "Manga", "Manhua"]}
+              selectedIndex={activeIndex}
+              onChange={(event) => {
+                setActiveIndex(event.nativeEvent.selectedSegmentIndex);
+              }}
+              tintColor={colors.primary}
+              backgroundColor={colors.neutral100}
+              appearance="light"
+              activeFontStyle={styles.segmentFontStyle}
+              style={styles.segmentStyle}
+              fontStyle={{
+                ...styles.segmentFontStyle,
+                color: colors.neutral900,
+              }}
+            />
+          </View>
 
           <View
             style={{
@@ -56,12 +82,12 @@ export default function HomeScreen() {
                 marginBottom: 5,
               }}
             >
-              Manhwa Yang Lagi Populer
+              Manhwa yang Lagi Ngetop Nih
             </Typography>
 
             <FlatList
               data={data}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => `${item.title}-${index}`}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => <PopularCard item={item} />}
@@ -72,7 +98,11 @@ export default function HomeScreen() {
                   }}
                 />
               )}
-              contentContainerStyle={{ gap: 26, paddingRight: 30 }}
+              contentContainerStyle={{
+                gap: 10,
+                paddingRight: 30,
+                paddingLeft: 10,
+              }}
               style={{
                 marginTop: 12,
                 marginBottom: 16,
@@ -92,19 +122,27 @@ export default function HomeScreen() {
                 marginBottom: 5,
               }}
             >
-              Manhwa Yang Lagi Ongoing
+              Manhwa yang Lagi Ongoing
             </Typography>
 
             <FlatList
               data={ongoingManhwa}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => `${item.title}-${index}`}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => <ManhwaCard item={item} />}
-              numColumns={3}
+              renderItem={({ item }) => (
+                <ManhwaCard
+                  imageUrl={item.imageUrl}
+                  latestChapter={item.latestChapter}
+                  link={item.link}
+                  rating={item.rating}
+                  title={item.title}
+                />
+              )}
+              numColumns={2}
               columnWrapperStyle={{
-                justifyContent: "flex-start",
+                justifyContent: "center",
                 gap: 20,
-                paddingRight: 5,
+                paddingLeft: 5,
                 marginBottom: 10,
               }}
               style={{
@@ -125,5 +163,32 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
+  },
+  segmentContainer: {
+    position: "relative",
+    marginVertical: 10,
+  },
+  segmentShadow: {
+    position: "absolute",
+    top: scale(8),
+    left: scale(8),
+    right: scale(-4),
+    bottom: scale(-4),
+    backgroundColor: colors.black,
+    borderRadius: radius._10,
+    zIndex: 1,
+  },
+  segmentStyle: {
+    height: scale(37),
+    position: "relative",
+    zIndex: 2,
+    borderWidth: scale(2),
+    borderColor: "#1a1a1a",
+    borderRadius: radius._10,
+  },
+  segmentFontStyle: {
+    fontSize: verticalScale(11),
+    fontWeight: "bold",
+    color: colors.neutral900,
   },
 });

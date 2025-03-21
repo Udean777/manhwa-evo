@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://kurokami.vercel.app", // Change to the real endpoint after deployed
+  baseURL: "https://kurokami-manhwa-api-steel.vercel.app", // Change to the real endpoint after deployed
 });
 
 api.interceptors.request.use(

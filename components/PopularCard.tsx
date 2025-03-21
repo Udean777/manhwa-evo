@@ -2,35 +2,51 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";
-import { fonts } from "@/constants/theme";
-import { ManhwaProps } from "@/utils/types";
+import { colors, fonts } from "@/constants/theme";
 import { Link } from "expo-router";
-import MaskedView from "@react-native-masked-view/masked-view";
 import { getManhwaId } from "@/utils/common";
 
 const PopularCard = ({ item: { rank, title, url, image } }: { item: any }) => {
-  //   console.log(manhwaId);
+  const getRankColor = (rankNumber: number) => {
+    const rankNum = Number(rankNumber);
+
+    if (rankNum === 1) return colors.pastelMint;
+    if (rankNum === 2) return colors.green;
+    if (rankNum === 3) return colors.pastelTeal;
+    if (rankNum === 5) return colors.rose;
+    return colors.primary;
+  };
 
   return (
     <Link href={`/manhwa/${getManhwaId(url)}`} asChild>
       <TouchableOpacity style={styles.card}>
-        <Image
-          source={{ uri: image }}
-          style={styles.image}
-          contentFit="cover"
-        />
-
-        <View style={styles.rankingContainer}>
-          <MaskedView
-            style={styles.maskedView}
-            maskElement={<Text style={styles.rankingText}>{rank}</Text>}
-          >
+        <View style={styles.imageContainerWrapper}>
+          <View style={styles.imageShadow} />
+          <View style={styles.imageContainer}>
             <Image
-              source={require("@/assets/images/rankingGradient.png")}
-              style={styles.rankingImage}
+              source={{ uri: image }}
+              style={styles.image}
               contentFit="cover"
             />
-          </MaskedView>
+          </View>
+        </View>
+
+        <View style={styles.rankingContainerWrapper}>
+          <View style={styles.rankingShadow} />
+          <View
+            style={[
+              styles.rankingContainer,
+              { backgroundColor: getRankColor(rank) },
+            ]}
+          >
+            <Typography
+              size={25}
+              color={colors.neutral900}
+              fontFamily={fonts.PoppinsBold}
+            >
+              {rank}
+            </Typography>
+          </View>
         </View>
 
         <Typography
@@ -51,38 +67,67 @@ export default PopularCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: 128,
+    width: 136,
     paddingLeft: 20,
     position: "relative",
+    alignItems: "center",
+  },
+  imageContainerWrapper: {
+    position: "relative",
+  },
+  imageShadow: {
+    position: "absolute",
+    top: 8,
+    left: 8,
+    right: -4,
+    bottom: -4,
+    backgroundColor: colors.neutral900,
+    borderRadius: 8,
+    zIndex: 1,
+  },
+  imageContainer: {
+    position: "relative",
+    zIndex: 2,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "#1a1a1a",
   },
   image: {
     width: 128,
     height: 192,
     borderRadius: 8,
   },
-  rankingContainer: {
+  rankingContainerWrapper: {
     position: "absolute",
     bottom: 36,
-    left: -14,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 9999, // Mirip `rounded-full` di NativeWind
+    left: -5,
+    zIndex: 3,
   },
-  maskedView: {
-    flex: 1,
+  rankingShadow: {
+    position: "absolute",
+    top: 4,
+    left: 4,
+    width: 42,
+    height: 42,
+    borderRadius: 9999,
+    backgroundColor: colors.neutral900,
+    zIndex: 1,
   },
-  rankingText: {
-    fontSize: 48,
-    fontWeight: "bold",
-    color: "white",
-  },
-  rankingImage: {
-    width: 56,
-    height: 56,
+  rankingContainer: {
+    position: "relative",
+    zIndex: 2,
+    width: 45,
+    height: 45,
+    borderRadius: 9999,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#1a1a1a",
   },
   title: {
     fontSize: 14,
     fontFamily: fonts.PoppinsBold,
     marginTop: 8,
+    width: 120,
   },
 });

@@ -18,6 +18,7 @@ import Typography from "@/components/Typography";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { accountOptionType } from "@/utils/types";
 import * as Icons from "phosphor-react-native";
+import SectionCard from "@/components/SectionCard";
 
 const accountOptions = [
   {
@@ -29,20 +30,17 @@ const accountOptions = [
   {
     title: "Tema",
     icon: <Icons.Moon size={24} color="#4ACB83" weight="regular" />,
-    routeName: "/(tabs)/orders",
     bgColor: "#E6F9F0",
   },
   {
     title: "Kebijakan & Privasi",
-    icon: <Icons.Lock size={26} color={colors.neutral600} weight="regular" />,
-    // routeName: "/(modals)/profileModal",
+    icon: <Icons.Lock size={24} color={colors.neutral600} weight="regular" />,
     bgColor: colors.neutral200,
   },
   {
     title: "Keluar",
-    icon: <Icons.Power size={26} color={"#e11d48"} weight="regular" />,
-    // routeName: "/(modals)/profileModal",
-    bgColor: "#ffc4b7",
+    icon: <Icons.Power size={24} color={"#e11d48"} weight="regular" />,
+    bgColor: "#FFE6E9",
   },
 ];
 
@@ -70,75 +68,89 @@ const Page = () => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Typography
-            size={28}
-            fontFamily={fonts.PoppinsBold}
-            color={colors.white}
-          >
-            Profile
-          </Typography>
-
-          <TouchableOpacity style={styles.moreButton}>
-            <Icons.DotsThreeVertical
-              size={24}
-              color={colors.white}
-              weight="bold"
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.profileSection}>
-          <View style={[styles.backgroundShape, styles.shape1]} />
-          <View style={[styles.backgroundShape, styles.shape2]} />
-          <View style={[styles.backgroundShape, styles.shape3]} />
-          <View style={[styles.backgroundShape, styles.shape4]} />
-          <View style={[styles.backgroundShape, styles.shape5]} />
-
-          <View style={styles.profileImageContainer}>
-            <Image
-              style={styles.profileImage}
-              source={getProfileImage(user?.image)}
-              placeholder="https://via.placeholder.com/100"
-              transition={300}
-            />
-          </View>
-
-          <View style={styles.userInfo}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.accountContainer}
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
+      >
+        <View style={styles.profileHeader}>
+          <View style={styles.headerContent}>
             <Typography
               size={24}
               fontFamily={fonts.PoppinsBold}
-              color={colors.white}
+              color={colors.neutral900}
             >
-              {user?.username}
+              Profile
             </Typography>
-            <Typography
-              size={16}
-              fontFamily={fonts.Poppins}
-              color={colors.white}
-              style={styles.phoneNumber}
-            >
-              {user?.email}
-            </Typography>
+
+            <TouchableOpacity style={styles.themeButton}>
+              <Icons.Moon size={22} color={colors.neutral900} weight="fill" />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.headerWave}>
+            <View style={styles.wave} />
           </View>
         </View>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={styles.accountContainer}
-          contentContainerStyle={{
-            paddingBottom: 100,
-          }}
-        >
-          <View style={styles.menuContainer}>
-            {accountOptions.map((item, index) => (
-              <Animated.View
-                key={item.title}
-                entering={FadeInDown.delay(index * 50)
-                  .springify()
-                  .damping(12)}
-              >
+        {/* Profile Information Card */}
+        <View style={styles.profileCardWrapper}>
+          <SectionCard bgColor="#FFFFFF">
+            <View style={styles.profileContent}>
+              <View style={styles.profileImageContainer}>
+                <Image
+                  style={styles.profileImage}
+                  source={getProfileImage(user?.image)}
+                  placeholder="https://via.placeholder.com/100"
+                  transition={300}
+                />
+                <TouchableOpacity style={styles.editImageButton}>
+                  <Icons.Camera size={16} color="#FFFFFF" weight="fill" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.userInfo}>
+                <Typography
+                  size={22}
+                  fontFamily={fonts.PoppinsBold}
+                  color={colors.neutral900}
+                >
+                  {user?.username}
+                </Typography>
+                <Typography
+                  size={15}
+                  fontFamily={fonts.Poppins}
+                  color={colors.neutral600}
+                  style={styles.emailText}
+                >
+                  {user?.email}
+                </Typography>
+              </View>
+            </View>
+          </SectionCard>
+        </View>
+
+        {/* Menu Items */}
+        <View style={styles.menuContainer}>
+          <Typography
+            size={18}
+            fontFamily={fonts.PoppinsSemiBold}
+            color={colors.neutral800}
+            style={styles.menuSectionTitle}
+          >
+            Pengaturan Akun
+          </Typography>
+
+          {accountOptions.map((item, index) => (
+            <Animated.View
+              key={item.title}
+              entering={FadeInDown.delay(index * 70)
+                .springify()
+                .damping(12)}
+            >
+              <SectionCard bgColor="#FFFFFF">
                 <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => handlePress(item)}
@@ -157,135 +169,133 @@ const Page = () => {
                     <Typography
                       size={16}
                       fontFamily={fonts.PoppinsSemiBold}
-                      color={colors.neutral900}
+                      color={
+                        item.title === "Keluar" ? "#e11d48" : colors.neutral800
+                      }
                     >
                       {item.title}
                     </Typography>
                   </View>
 
-                  <Icons.CaretRight size={20} color={colors.neutral400} />
+                  <Icons.CaretRight
+                    size={20}
+                    color={
+                      item.title === "Keluar" ? "#e11d48" : colors.neutral400
+                    }
+                  />
                 </TouchableOpacity>
-              </Animated.View>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
+              </SectionCard>
+            </Animated.View>
+          ))}
+        </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  accountContainer: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.neutral50,
   },
-  header: {
+  profileHeader: {
+    backgroundColor: colors.primary,
+    paddingTop: 30,
+    position: "relative",
+    height: 160,
+  },
+  headerContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
+    paddingBottom: 20,
   },
-  moreButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  profileSection: {
-    paddingVertical: 20,
-    alignItems: "center",
-    position: "relative",
-    height: 220,
-    marginBottom: 30,
-  },
-  backgroundShape: {
+  headerWave: {
     position: "absolute",
-    backgroundColor: colors.neutral100 + "50",
-    borderRadius: 100,
-  },
-  shape1: {
-    width: 100,
-    height: 100,
-    top: 10,
-    left: 10,
-    borderTopLeftRadius: 0,
-  },
-  shape2: {
-    width: 70,
-    height: 70,
-    top: 30,
-    right: 30,
-    borderRadius: 20,
-  },
-  shape3: {
-    width: 120,
-    height: 120,
     bottom: 0,
-    left: 20,
-    borderBottomLeftRadius: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+    overflow: "hidden",
   },
-  shape4: {
-    width: 60,
+  wave: {
+    position: "absolute",
+    bottom: -20,
+    left: 0,
+    right: 0,
     height: 60,
-    bottom: 40,
-    right: 40,
-    borderRadius: 10,
-  },
-  shape5: {
-    width: 80,
-    height: 80,
-    top: 100,
-    left: 180,
-    borderRadius: 30,
-  },
-  profileImageContainer: {
-    position: "relative",
-    marginBottom: 15,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: colors.green,
-  },
-  userInfo: {
-    alignItems: "center",
-  },
-  phoneNumber: {
-    marginTop: 5,
-    opacity: 0.9,
-  },
-  accountContainer: {
-    flex: 1,
     backgroundColor: colors.neutral50,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingTop: 25,
   },
-  accountTitle: {
-    marginBottom: 20,
+  themeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    // backgroundColor: colors.green,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profileCardWrapper: {
+    marginTop: -60,
+    paddingHorizontal: 20,
+    marginBottom: 25,
+  },
+  profileCard: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+  },
+  profileContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  profileImageContainer: {
+    position: "relative",
+    marginRight: 20,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  editImageButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: colors.primary,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
+  },
+  userInfo: {
+    flex: 1,
+  },
+  emailText: {
+    marginTop: 3,
   },
   menuContainer: {
-    gap: 15,
+    paddingHorizontal: 20,
+    gap: 10,
+  },
+  menuSectionTitle: {
+    marginBottom: 15,
+    marginLeft: 5,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
   },
   iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 15,

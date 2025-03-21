@@ -1,6 +1,6 @@
 // hooks/useManhwaSearch.ts
-import { useState } from 'react';
-import api from '@/utils/interceptor';
+import { useState } from "react";
+import api from "@/utils/interceptor";
 
 interface ManhwaSearchItem {
   title: string;
@@ -54,9 +54,10 @@ export default function useManhwaSearch(): [SearchState, SearchActions] {
     setError(null);
 
     try {
-      const endpoint = page === 1
-        ? `/api/search/${encodeURIComponent(searchQuery)}`
-        : `/api/search/${encodeURIComponent(searchQuery)}/page/${page}`;
+      const endpoint =
+        page === 1
+          ? `/api/search/${encodeURIComponent(searchQuery)}`
+          : `/api/search/${encodeURIComponent(searchQuery)}/page/${page}`;
 
       const response = await api.get<SearchResponse>(endpoint);
 
@@ -114,14 +115,14 @@ export default function useManhwaSearch(): [SearchState, SearchActions] {
     error,
     currentPage,
     totalPages,
-    hasNextPage
+    hasNextPage,
   };
 
   const actions: SearchActions = {
     search,
     goToPage,
     goToNextPage,
-    goToPrevPage
+    goToPrevPage,
   };
 
   return [state, actions];

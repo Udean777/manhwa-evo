@@ -8,27 +8,19 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
-import { useRouter } from "expo-router";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
 import Header from "@/components/Header";
-import { colors, fonts } from "@/constants/theme";
+import { colors, fonts, radius, spacingX, spacingY } from "@/constants/theme";
 import * as Icons from "phosphor-react-native";
-import { Image } from "expo-image";
 import useManhwaSearch from "@/hooks/useSearch";
-
-interface ManhwaSearchItem {
-  title: string;
-  url: string;
-  image: string;
-  latestChapter: string;
-  rating: string;
-}
+import ManhwaCard from "@/components/ManhwaCard";
+import Error from "@/components/Error";
+import Loading from "@/components/Loading";
+import { scale } from "@/utils/style";
 
 export default function SearchScreen() {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const router = useRouter();
-
+  const [searchQuery, setSearchQuery] = useState("");
   const [
     { results, isLoading, error, currentPage, totalPages, hasNextPage },
     { search, goToNextPage, goToPrevPage },
@@ -40,95 +32,107 @@ export default function SearchScreen() {
     search(searchQuery);
   };
 
-  const handleManhwaPress = (item: ManhwaSearchItem) => {
-    const linkParts = item.url.split("/");
-    const mangaIndex = linkParts.indexOf("manga");
-    if (mangaIndex !== -1 && mangaIndex + 1 < linkParts.length) {
-      const manhwaId = linkParts[mangaIndex + 1];
-      router.push({ pathname: "/manhwa_detail", params: { manhwaId } });
-    }
-  };
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  const renderManhwaItem = ({ item }: { item: ManhwaSearchItem }) => (
-    <TouchableOpacity
-      style={styles.resultItem}
-      onPress={() => handleManhwaPress(item)}
-    >
-      <Image
-        source={{ uri: item.image }}
-        style={styles.manhwaImage}
-        contentFit="cover"
-        transition={300}
-      />
-      <View style={styles.manhwaInfo}>
-        <Typography style={styles.manhwaTitle} textProps={{ numberOfLines: 2 }}>
-          {item.title}
-        </Typography>
-        <View style={styles.detailsRow}>
-          <Typography style={styles.manhwaChapter}>
-            {item.latestChapter}
-          </Typography>
-          <View style={styles.ratingContainer}>
-            <Icons.Star size={12} color="#FFD700" weight="fill" />
-            <Typography style={styles.manhwaRating}>{item.rating}</Typography>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+  if (error) {
+    return <Error onRefresh={() => {}} error={error} />;
+  }
 
   return (
     <ScreenWrapper>
-      <Header leftIcon={<Icons.ArrowLeft size={20} />} title="Search Manhwa" />
+      <Header leftIcon={<Icons.ArrowLeft size={20} />} title="Cari Manhwa" />
 
       <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <View style={styles.searchInputContainer}>
-            <Icons.MagnifyingGlass size={20} color="#666" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search manhwa..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              onSubmitEditing={handleSearch}
-              returnKeyType="search"
-              autoCapitalize="none"
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery("")}>
-                <Icons.X size={20} color="#666" />
-              </TouchableOpacity>
-            )}
+        <View style={styles.searchShadowContainer}>
+          <View style={styles.innerShadow} />
+          <View style={styles.searchContainer}>
+            <View style={styles.searchInputContainer}>
+              <Icons.MagnifyingGlass size={20} color="#666" />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Cari manhwa..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={handleSearch}
+                returnKeyType="search"
+                autoCapitalize="none"
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity onPress={() => setSearchQuery("")}>
+                  <Icons.X size={20} color="#666" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <TouchableOpacity
+              style={styles.searchButton}
+              onPress={handleSearch}
+              disabled={isLoading || !searchQuery.trim()}
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Typography style={styles.searchButtonText}>Cari</Typography>
+              )}
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={styles.searchButton}
-            onPress={handleSearch}
-            disabled={isLoading || !searchQuery.trim()}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <Typography style={styles.searchButtonText}>Search</Typography>
-            )}
-          </TouchableOpacity>
         </View>
 
-        {error && (
-          <View style={styles.errorContainer}>
-            <Typography style={styles.errorText}>{error}</Typography>
-          </View>
-        )}
-
-        {results.length > 0 ? (
-          <>
-            <FlatList
-              data={results}
-              renderItem={renderManhwaItem}
-              keyExtractor={(item, index) => `${item.title}-${index}`}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.resultsList}
-              ListFooterComponent={
+        <FlatList
+          data={results}
+          renderItem={({ item }) => (
+            <ManhwaCard
+              title={item.title}
+              imageUrl={item.image}
+              latestChapter={item.latestChapter}
+              link={item.url}
+              rating={item.rating}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              {!isLoading && searchQuery.trim() ? (
+                <>
+                  <Icons.MagnifyingGlass size={48} color="#ccc" />
+                  <Typography style={styles.emptyText}>
+                    Gaada manhwa yang di temukan untuk judul "{searchQuery}"
+                  </Typography>
+                  <Typography style={styles.emptySubtext}>
+                    Coba cari judul lain ya.
+                  </Typography>
+                </>
+              ) : !isLoading ? (
+                <>
+                  <Icons.MagnifyingGlass size={48} color="#ccc" />
+                  <Typography style={styles.emptyText}>
+                    Cari manhwa favorite kamu
+                  </Typography>
+                  <Typography style={styles.emptySubtext}>
+                    Masukkan judul manhwa yang ingin kamu cari
+                  </Typography>
+                </>
+              ) : null}
+            </View>
+          }
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          columnWrapperStyle={{
+            justifyContent: "center",
+            gap: 20,
+            paddingRight: 5,
+            paddingLeft: 5,
+            marginBottom: 10,
+          }}
+          style={{
+            marginTop: 8,
+            paddingBottom: 80,
+          }}
+          ListFooterComponent={
+            results.length > 0 ? (
+              <View style={styles.paginationShadowContainer}>
+                <View style={styles.paginationInnerShadow} />
                 <View style={styles.paginationContainer}>
                   <TouchableOpacity
                     style={[
@@ -143,12 +147,12 @@ export default function SearchScreen() {
                       color={currentPage === 1 ? "#AAA" : "#FFF"}
                     />
                     <Typography style={styles.paginationButtonText}>
-                      Previous
+                      Sebelumnya
                     </Typography>
                   </TouchableOpacity>
 
                   <Typography style={styles.pageIndicator}>
-                    Page {currentPage}{" "}
+                    Halaman {currentPage}{" "}
                     {totalPages > 1 ? `of ${totalPages}` : ""}
                   </Typography>
 
@@ -161,7 +165,7 @@ export default function SearchScreen() {
                     disabled={!hasNextPage || isLoading}
                   >
                     <Typography style={styles.paginationButtonText}>
-                      Next
+                      Selanjutnya
                     </Typography>
                     <Icons.CaretRight
                       size={16}
@@ -169,34 +173,10 @@ export default function SearchScreen() {
                     />
                   </TouchableOpacity>
                 </View>
-              }
-            />
-          </>
-        ) : (
-          <View style={styles.emptyContainer}>
-            {!isLoading && searchQuery.trim() ? (
-              <>
-                <Icons.MagnifyingGlass size={48} color="#ccc" />
-                <Typography style={styles.emptyText}>
-                  No manhwa found for "{searchQuery}"
-                </Typography>
-                <Typography style={styles.emptySubtext}>
-                  Try a different search term
-                </Typography>
-              </>
-            ) : !isLoading ? (
-              <>
-                <Icons.MagnifyingGlass size={48} color="#ccc" />
-                <Typography style={styles.emptyText}>
-                  Search for your favorite manhwa
-                </Typography>
-                <Typography style={styles.emptySubtext}>
-                  Enter a title or keywords above
-                </Typography>
-              </>
-            ) : null}
-          </View>
-        )}
+              </View>
+            ) : null
+          }
+        />
       </View>
     </ScreenWrapper>
   );
@@ -208,9 +188,30 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
-  searchContainer: {
-    flexDirection: "row",
+  // Shadow container for search section
+  searchShadowContainer: {
+    position: "relative",
     marginBottom: 16,
+  },
+  innerShadow: {
+    position: "absolute",
+    top: scale(8),
+    left: scale(8),
+    right: scale(-4),
+    bottom: scale(-4),
+    backgroundColor: colors.black,
+    borderRadius: radius._10 || 12,
+    zIndex: 1,
+  },
+  searchContainer: {
+    position: "relative",
+    zIndex: 2,
+    flexDirection: "row",
+    borderRadius: radius._10 || 12,
+    borderWidth: scale(2),
+    borderColor: "#1a1a1a",
+    backgroundColor: "#fff",
+    padding: (spacingX && spacingX._10) || 10,
   },
   searchInputContainer: {
     flex: 1,
@@ -220,6 +221,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 12,
     marginRight: 8,
+    borderWidth: 2,
+    borderColor: colors.neutral900,
   },
   searchInput: {
     flex: 1,
@@ -234,62 +237,46 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
+    borderWidth: 2,
+    borderColor: colors.neutral900,
   },
   searchButtonText: {
     color: "#fff",
     fontFamily: fonts.PoppinsSemiBold,
     fontSize: 14,
   },
-  resultsList: {
-    paddingBottom: 16,
+  columnWrapper: {
+    justifyContent: "flex-start",
+    gap: 20,
+    paddingRight: 5,
+    marginBottom: 10,
   },
-  resultItem: {
-    flexDirection: "row",
-    backgroundColor: "#f8f8f8",
-    borderRadius: 8,
-    padding: 8,
-    marginBottom: 12,
+  // Shadow container for pagination
+  paginationShadowContainer: {
+    position: "relative",
+    marginTop: 16,
   },
-  manhwaImage: {
-    width: 70,
-    height: 100,
-    borderRadius: 4,
-  },
-  manhwaInfo: {
-    flex: 1,
-    marginLeft: 12,
-    justifyContent: "space-between",
-  },
-  manhwaTitle: {
-    fontSize: 16,
-    fontFamily: fonts.PoppinsSemiBold,
-    color: "#333",
-  },
-  detailsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 8,
-  },
-  manhwaChapter: {
-    fontSize: 14,
-    color: "#666",
-  },
-  ratingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  manhwaRating: {
-    fontSize: 14,
-    fontFamily: fonts.PoppinsMedium,
-    color: "#333",
-    marginLeft: 4,
+  paginationInnerShadow: {
+    position: "absolute",
+    top: scale(8),
+    left: scale(8),
+    right: scale(-4),
+    bottom: scale(-4),
+    backgroundColor: colors.black,
+    borderRadius: radius._10 || 12,
+    zIndex: 1,
   },
   paginationContainer: {
+    position: "relative",
+    zIndex: 2,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 16,
+    backgroundColor: "#fff",
+    borderRadius: radius._10 || 12,
+    borderWidth: scale(2),
+    borderColor: "#1a1a1a",
+    padding: (spacingX && spacingX._10) || 10,
   },
   paginationButton: {
     flexDirection: "row",
@@ -329,15 +316,5 @@ const styles = StyleSheet.create({
     color: "#999",
     marginTop: 8,
     textAlign: "center",
-  },
-  errorContainer: {
-    padding: 12,
-    backgroundColor: "#FFEBEE",
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: "#D32F2F",
-    fontSize: 14,
   },
 });
