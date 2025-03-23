@@ -78,7 +78,7 @@ const Page = () => {
         <View style={styles.profileHeader}>
           <View style={styles.headerContent}>
             <Typography
-              size={24}
+              size={18}
               fontFamily={fonts.PoppinsBold}
               color={colors.neutral900}
             >
@@ -109,14 +109,14 @@ const Page = () => {
 
               <View style={styles.userInfo}>
                 <Typography
-                  size={22}
+                  size={16}
                   fontFamily={fonts.PoppinsBold}
                   color={colors.neutral900}
                 >
                   {user?.username}
                 </Typography>
                 <Typography
-                  size={15}
+                  size={12}
                   fontFamily={fonts.Poppins}
                   color={colors.neutral600}
                   style={styles.emailText}
@@ -162,7 +162,7 @@ const Page = () => {
 
                   <View style={styles.menuTitleContainer}>
                     <Typography
-                      size={16}
+                      size={14}
                       fontFamily={fonts.PoppinsSemiBold}
                       color={
                         item.title === "Keluar" ? "#e11d48" : colors.neutral800

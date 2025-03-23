@@ -1,4 +1,4 @@
-import { ViewStyle } from "react-native";
+import { TouchableOpacityProps, ViewStyle } from "react-native";
 
 export type ImageUploadProps = {
   file?: any;
@@ -8,6 +8,19 @@ export type ImageUploadProps = {
   imageStyle?: ViewStyle;
   placeholder?: string;
 };
+
+export type ModalWrapperProps = {
+  style?: ViewStyle;
+  children: React.ReactNode;
+  bg?: string;
+};
+
+export interface CustomButtonProps extends TouchableOpacityProps {
+  style?: ViewStyle;
+  onPress?: () => void;
+  loading?: boolean;
+  children: React.ReactNode;
+}
 
 export type accountOptionType = {
   title: string;

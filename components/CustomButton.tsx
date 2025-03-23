@@ -10,13 +10,7 @@ import React from "react";
 import { verticalScale } from "@/utils/style";
 import { colors, radius } from "@/constants/theme";
 import Loading from "./Loading";
-
-interface CustomButtonProps extends TouchableOpacityProps {
-  style?: ViewStyle;
-  onPress?: () => void;
-  loading?: boolean;
-  children: React.ReactNode;
-}
+import { CustomButtonProps } from "@/utils/types";
 
 export const CustomButton = ({
   style,
@@ -38,10 +32,10 @@ export const CustomButton = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      style={styles.shadowContainer}
+      style={[styles.shadowContainer, style]}
     >
       <View style={styles.shadowLayer} />
-      <View style={[styles.button, style]}>{children}</View>
+      <View style={styles.button}>{children}</View>
     </TouchableOpacity>
   );
 };
@@ -52,12 +46,13 @@ const styles = StyleSheet.create({
   },
   shadowLayer: {
     position: "absolute",
-    top: 6, 
-    left: 6, 
+    top: 6,
+    left: 6,
     width: "100%",
     height: verticalScale(52),
-    backgroundColor: "black", 
+    backgroundColor: "black",
     borderRadius: radius._17,
+    zIndex: 1,
   },
   button: {
     backgroundColor: colors.primary,
@@ -66,5 +61,7 @@ const styles = StyleSheet.create({
     height: verticalScale(52),
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
+    zIndex: 2,
   },
 });
