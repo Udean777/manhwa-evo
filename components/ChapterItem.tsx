@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 import { Link, useRouter } from "expo-router";
 import Typography from "./Typography";
@@ -12,7 +12,7 @@ const ChapterItem = ({ item }: any) => {
       href={`/manhwa/${getChapterId(item.chapterLink)}/reading_screen`}
       asChild
     >
-      <TouchableOpacity style={styles.chapterItem}>
+      <Pressable style={styles.chapterItem}>
         <View style={styles.chapterInfoContainer}>
           <Typography
             fontFamily={fonts.PoppinsBold}
@@ -29,10 +29,10 @@ const ChapterItem = ({ item }: any) => {
             {item.chapterDate}
           </Typography>
         </View>
-        <TouchableOpacity style={styles.downloadButton}>
+        <Pressable style={styles.downloadButton}>
           <Icons.CaretRight size={20} color={colors.neutral900} weight="bold" />
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </Pressable>
+      </Pressable>
     </Link>
   );
 };
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: colors.neutral900,
   },
   chapterInfoContainer: {
     flex: 1,

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import {
   View,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
+  Pressable,
   ActivityIndicator,
   TextInput,
   Keyboard,
+  Text,
 } from "react-native";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typography from "@/components/Typography";
@@ -18,6 +19,8 @@ import ManhwaCard from "@/components/ManhwaCard";
 import Error from "@/components/Error";
 import Loading from "@/components/Loading";
 import { scale } from "@/utils/style";
+import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@/components/BottomSheet";
 
 export default function SearchScreen() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +28,13 @@ export default function SearchScreen() {
     { results, isLoading, error, currentPage, totalPages, hasNextPage },
     { search, goToNextPage, goToPrevPage },
   ] = useManhwaSearch();
+
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+
+  const handleFilterPress = useCallback(() => {
+    bottomSheetRef.current?.present();
+  }, []);
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
@@ -60,12 +70,23 @@ export default function SearchScreen() {
                 autoCapitalize="none"
               />
               {searchQuery.length > 0 && (
-                <TouchableOpacity onPress={() => setSearchQuery("")}>
+                <Pressable onPress={() => setSearchQuery("")}>
                   <Icons.X size={20} color="#666" />
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
-            <TouchableOpacity
+            <Pressable
+              style={styles.searchButton}
+              onPress={handleFilterPress}
+              // disabled={isLoading || !searchQuery.trim()}
+            >
+              <Icons.SlidersHorizontal
+                size={20}
+                color={colors.neutral900}
+                weight="fill"
+              />
+            </Pressable>
+            <Pressable
               style={styles.searchButton}
               onPress={handleSearch}
               disabled={isLoading || !searchQuery.trim()}
@@ -73,9 +94,15 @@ export default function SearchScreen() {
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Typography style={styles.searchButtonText}>Cari</Typography>
+                <Typography
+                  size={14}
+                  color={colors.neutral800}
+                  fontFamily={fonts.PoppinsSemiBold}
+                >
+                  Cari
+                </Typography>
               )}
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 
@@ -134,7 +161,7 @@ export default function SearchScreen() {
               <View style={styles.paginationShadowContainer}>
                 <View style={styles.paginationInnerShadow} />
                 <View style={styles.paginationContainer}>
-                  <TouchableOpacity
+                  <Pressable
                     style={[
                       styles.paginationButton,
                       currentPage === 1 && styles.disabledButton,
@@ -149,14 +176,13 @@ export default function SearchScreen() {
                     <Typography style={styles.paginationButtonText}>
                       Sebelumnya
                     </Typography>
-                  </TouchableOpacity>
+                  </Pressable>
 
                   <Typography style={styles.pageIndicator}>
-                    Halaman {currentPage}{" "}
-                    {totalPages > 1 ? `of ${totalPages}` : ""}
+                    {currentPage} {totalPages > 1 ? `- ${totalPages}` : ""}
                   </Typography>
 
-                  <TouchableOpacity
+                  <Pressable
                     style={[
                       styles.paginationButton,
                       !hasNextPage && styles.disabledButton,
@@ -171,13 +197,19 @@ export default function SearchScreen() {
                       size={16}
                       color={!hasNextPage ? "#AAA" : "#FFF"}
                     />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               </View>
             ) : null
           }
         />
       </View>
+
+      <BottomSheet ref={bottomSheetRef} snapPoints={snapPoints}>
+        <BottomSheetView>
+          <Text>Hello</Text>
+        </BottomSheetView>
+      </BottomSheet>
     </ScreenWrapper>
   );
 }
@@ -188,7 +220,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
-  // Shadow container for search section
   searchShadowContainer: {
     position: "relative",
     marginBottom: 16,
@@ -239,6 +270,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderWidth: 2,
     borderColor: colors.neutral900,
+    marginRight: 5,
   },
   searchButtonText: {
     color: "#fff",
@@ -251,20 +283,20 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     marginBottom: 10,
   },
-  // Shadow container for pagination
   paginationShadowContainer: {
     position: "relative",
     marginTop: 16,
   },
   paginationInnerShadow: {
     position: "absolute",
-    top: scale(8),
-    left: scale(8),
-    right: scale(-4),
-    bottom: scale(-4),
+    top: scale(4),
+    left: scale(4),
+    right: scale(-2),
+    bottom: scale(-2),
     backgroundColor: colors.black,
     borderRadius: radius._10 || 12,
     zIndex: 1,
+    opacity: 0.1, // Memberikan efek shadow lebih halus
   },
   paginationContainer: {
     position: "relative",
@@ -273,18 +305,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#fff",
-    borderRadius: radius._10 || 12,
+    borderRadius: radius._12 || 14,
     borderWidth: scale(2),
     borderColor: "#1a1a1a",
-    padding: (spacingX && spacingX._10) || 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
   paginationButton: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.primary,
     borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    minWidth: 120,
+    justifyContent: "center",
   },
   disabledButton: {
     backgroundColor: "#e0e0e0",
@@ -295,9 +335,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginHorizontal: 4,
   },
+  disabledButtonText: {
+    color: "#999", // Warna teks lebih kontras untuk tombol disabled
+  },
   pageIndicator: {
     fontSize: 14,
-    color: "#666",
+    color: "#444",
+    fontFamily: fonts.PoppinsMedium,
   },
   emptyContainer: {
     flex: 1,

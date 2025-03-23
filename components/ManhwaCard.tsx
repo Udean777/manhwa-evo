@@ -1,16 +1,10 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import React, { useMemo } from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";
 import { colors, fonts } from "@/constants/theme";
 import { Link } from "expo-router";
-import { scale, verticalScale } from "@/utils/style";
+import { scale } from "@/utils/style";
 import { getManhwaId } from "@/utils/common";
 
 const ManhwaCard = ({
@@ -32,6 +26,7 @@ const ManhwaCard = ({
     colors.rose,
     colors.pastelTeal,
   ];
+
   const randomColor = useMemo(
     () => backgroundColors[Math.floor(Math.random() * backgroundColors.length)],
     []
@@ -78,7 +73,7 @@ const ManhwaCard = ({
         </View>
 
         <Link href={`/manhwa/${getManhwaId(link)}`} asChild>
-          <TouchableOpacity style={styles.actionButton}>
+          <Pressable style={styles.actionButton}>
             <View style={styles.buttonShadow} />
             <View style={styles.buttonContent}>
               <Typography
@@ -89,7 +84,7 @@ const ManhwaCard = ({
                 Baca Sekarang
               </Typography>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         </Link>
       </View>
     </View>

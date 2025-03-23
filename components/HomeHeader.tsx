@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-} from "react-native";
+import { View, TextInput, Pressable, StyleSheet } from "react-native";
 import * as Icons from "phosphor-react-native";
 import { useAuth } from "@/context/authContext";
 import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { getGreeting } from "@/utils/common";
 import { colors, fonts, radius } from "@/constants/theme";
 import { scale } from "@/utils/style";
@@ -38,9 +31,9 @@ const HomeHeader = () => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.iconButton}>
+        <Pressable style={styles.iconButton}>
           <Icons.Moon weight="fill" size={24} color="#333" />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.searchBarContainer}>

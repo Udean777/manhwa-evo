@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         router.replace("/(tabs)");
       } else {
         setUser(null);
-        router.replace("/welcome");
+        router.replace("/login_screen");
       }
     });
 

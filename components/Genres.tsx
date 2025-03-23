@@ -1,10 +1,4 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 import SectionCard from "./SectionCard";
 import Typography from "@/components/Typography";

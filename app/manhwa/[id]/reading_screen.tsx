@@ -3,7 +3,7 @@ import {
   Dimensions,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -34,7 +34,6 @@ const Page = () => {
     Record<number, { width: number; height: number }>
   >({});
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const flatListRef = useRef<FlatList>(null);
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
@@ -188,9 +187,9 @@ const Page = () => {
                     !chapterData?.prevChapter && styles.disabledButton,
                   ]}
                 >
-                  <TouchableOpacity disabled={!chapterData?.prevChapter}>
+                  <Pressable disabled={!chapterData?.prevChapter}>
                     <Icons.ArrowLeft
-                      size={24}
+                      size={20}
                       color={
                         chapterData?.prevChapter ? colors.neutral900 : "#AAA"
                       }
@@ -198,7 +197,7 @@ const Page = () => {
                     <Typography style={styles.navButtonText}>
                       Sebelumnya
                     </Typography>
-                  </TouchableOpacity>
+                  </Pressable>
                 </Link>
               )}
 
@@ -213,17 +212,17 @@ const Page = () => {
                     !chapterData?.nextChapter && styles.disabledButton,
                   ]}
                 >
-                  <TouchableOpacity disabled={!chapterData?.nextChapter}>
+                  <Pressable disabled={!chapterData?.nextChapter}>
                     <Typography style={styles.navButtonText}>
                       Selanjutnya
                     </Typography>
                     <Icons.ArrowRight
-                      size={24}
+                      size={20}
                       color={
                         chapterData?.nextChapter ? colors.neutral900 : "#AAA"
                       }
                     />
-                  </TouchableOpacity>
+                  </Pressable>
                 </Link>
               )}
             </View>

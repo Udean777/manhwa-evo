@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import { StyleSheet, Pressable, View, ViewStyle } from "react-native";
 import React, { ReactNode } from "react";
 import { colors, fonts } from "@/constants/theme";
 import Typography from "./Typography";
@@ -23,12 +23,9 @@ const Header = ({
 
   return (
     <View style={[styles.container, style]}>
-      <TouchableOpacity
-        onPress={() => router.back()}
-        style={styles.iconWrapper}
-      >
+      <Pressable onPress={() => router.back()} style={styles.iconWrapper}>
         {leftIcon}
-      </TouchableOpacity>
+      </Pressable>
       <Typography
         size={18}
         color={titleColor}

@@ -8,7 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -92,12 +92,12 @@ const Modal = () => {
               transition={500}
             />
 
-            <TouchableOpacity style={styles.editIcon} onPress={pickImage}>
+            <Pressable style={styles.editIcon} onPress={pickImage}>
               <Icons.Pencil
                 size={verticalScale(20)}
                 color={colors.neutral900}
               />
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <View style={styles.inputContainer}>
@@ -131,7 +131,7 @@ const Modal = () => {
             size={17}
             color={colors.neutral900}
           >
-            Edit Profil
+            Simpan
           </Typography>
         </CustomButton>
       </View>

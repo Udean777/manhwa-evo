@@ -1,3 +1,6 @@
+import { colors } from "@/constants/theme";
+import { useMemo } from "react";
+
 export const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return "Selamat Pagi!";

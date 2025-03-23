@@ -1,9 +1,11 @@
 import { fonts } from "@/constants/theme";
 import { AuthProvider } from "@/context/authContext";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -31,19 +33,23 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(screens)" />
-        <Stack.Screen name={"manhwa/[id]"} />
-        <Stack.Screen name={"manhwa/[id]/all_chapters"} />
-        <Stack.Screen name={"manhwa/[id]/reading_screen"} />
-      </Stack>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(screens)" />
+            <Stack.Screen name={"manhwa/[id]"} />
+            <Stack.Screen name={"manhwa/[id]/all_chapters"} />
+            <Stack.Screen name={"manhwa/[id]/reading_screen"} />
+          </Stack>
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
     </AuthProvider>
   );
 }

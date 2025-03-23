@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, Pressable, View } from "react-native";
 import React from "react";
 import { verticalScale } from "@/utils/style";
 import { colors, radius } from "@/constants/theme";
@@ -20,29 +13,35 @@ export const CustomButton = ({
 }: CustomButtonProps) => {
   if (loading) {
     return (
-      <View style={[styles.shadowContainer, style]}>
-        <View style={[styles.button, { backgroundColor: "transparent" }]}>
-          <Loading />
+      <Pressable
+        onPress={onPress}
+        // activeOpacity={0.8}
+        style={[styles.shadowContainer, style]}
+      >
+        <View style={styles.shadowLayer} />
+        <View style={styles.button}>
+          <Loading color={colors.black} />
         </View>
-      </View>
+      </Pressable>
     );
   }
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
-      activeOpacity={0.8}
+      // activeOpacity={0.8}
       style={[styles.shadowContainer, style]}
     >
       <View style={styles.shadowLayer} />
       <View style={styles.button}>{children}</View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   shadowContainer: {
     position: "relative",
+    zIndex: 2,
   },
   shadowLayer: {
     position: "absolute",

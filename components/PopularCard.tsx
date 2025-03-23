@@ -1,10 +1,4 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";

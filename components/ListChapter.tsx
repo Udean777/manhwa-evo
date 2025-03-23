@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 import Typography from "./Typography";
 import { FlatList } from "react-native";
@@ -14,12 +14,19 @@ const ListChapter = ({ manhwaDetail, manhwaId }: any) => {
       <View style={styles.chapterHeaderRow}>
         <Typography style={styles.sectionTitle}>Chapters</Typography>
         <View style={styles.chapterControls}>
-          <TouchableOpacity
+          <Pressable
             style={styles.viewAll}
             onPress={() => router.push(`/manhwa/${manhwaId}/all_chapters`)}
           >
-            <Typography style={styles.viewAllText}>Lihat Semua</Typography>
-          </TouchableOpacity>
+            <Typography
+              style={styles.viewAllText}
+              size={12}
+              fontFamily={fonts.PoppinsMedium}
+              color={colors.neutral800}
+            >
+              Lihat Semua
+            </Typography>
+          </Pressable>
         </View>
       </View>
       <FlatList
@@ -67,9 +74,6 @@ const styles = StyleSheet.create({
     borderColor: "#1a1a1a",
   },
   viewAllText: {
-    fontSize: 12,
-    color: "#333",
     marginLeft: 4,
-    fontFamily: fonts.PoppinsMedium,
   },
 });

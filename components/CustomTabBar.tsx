@@ -1,10 +1,4 @@
-import {
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Animated,
-} from "react-native";
+import { Platform, StyleSheet, Pressable, View, Animated } from "react-native";
 import React, { useRef, useEffect } from "react";
 import { verticalScale } from "@/utils/style";
 import { colors } from "@/constants/theme";
@@ -92,13 +86,13 @@ const CustomTabBar: React.FC<CustomTabBarProps> = ({
           };
 
           return (
-            <TouchableOpacity
+            <Pressable
               key={route.name}
               onPress={onPress}
               style={styles.tabBarItem}
             >
               {tabBarIcons[route.name] && tabBarIcons[route.name](isFocused)}
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
       </BlurView>

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, Pressable, ViewStyle } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
 import { CaretLeft } from "phosphor-react-native";
@@ -21,12 +21,9 @@ const BackButton = ({
   const router = useRouter();
 
   return (
-    <TouchableOpacity
-      onPress={() => router.back()}
-      style={[styles.button, style]}
-    >
+    <Pressable onPress={() => router.back()} style={[styles.button, style]}>
       {icon}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

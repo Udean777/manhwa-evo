@@ -1,10 +1,4 @@
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, ScrollView, StyleSheet, Pressable, View } from "react-native";
 import React from "react";
 import { colors, fonts } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
@@ -85,9 +79,9 @@ const Page = () => {
               Profile
             </Typography>
 
-            <TouchableOpacity style={styles.themeButton}>
+            <Pressable style={styles.themeButton}>
               <Icons.Moon size={22} color={colors.neutral900} weight="fill" />
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <View style={styles.headerWave}>
@@ -146,7 +140,7 @@ const Page = () => {
                 .damping(12)}
             >
               <SectionCard bgColor="#FFFFFF">
-                <TouchableOpacity
+                <Pressable
                   style={styles.menuItem}
                   onPress={() => handlePress(item)}
                   activeOpacity={0.7}
@@ -178,7 +172,7 @@ const Page = () => {
                       item.title === "Keluar" ? "#e11d48" : colors.neutral400
                     }
                   />
-                </TouchableOpacity>
+                </Pressable>
               </SectionCard>
             </Animated.View>
           ))}

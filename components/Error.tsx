@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 import ScreenWrapper from "./ScreenWrapper";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,9 +17,9 @@ const Error = ({
       <View style={styles.errorContainer}>
         <Ionicons name="alert-circle-outline" size={50} color="#ff3b30" />
         <Typography style={styles.errorText}>{error}</Typography>
-        <TouchableOpacity style={styles.retryButton} onPress={onRefresh}>
+        <Pressable style={styles.retryButton} onPress={onRefresh}>
           <Typography style={styles.retryButtonText}>Retry</Typography>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ScreenWrapper>
   );
