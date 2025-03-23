@@ -24,7 +24,7 @@ const accountOptions = [
   {
     title: "Edit Profil",
     icon: <Icons.User size={24} color="#4A97F0" weight="regular" />,
-    routeName: "/(modals)/profile_modal",
+    routeName: "/(modals)/edit_profile",
     bgColor: "#E6F2FF",
   },
   {
@@ -95,7 +95,6 @@ const Page = () => {
           </View>
         </View>
 
-        {/* Profile Information Card */}
         <View style={styles.profileCardWrapper}>
           <SectionCard bgColor="#FFFFFF">
             <View style={styles.profileContent}>
@@ -106,9 +105,6 @@ const Page = () => {
                   placeholder="https://via.placeholder.com/100"
                   transition={300}
                 />
-                <TouchableOpacity style={styles.editImageButton}>
-                  <Icons.Camera size={16} color="#FFFFFF" weight="fill" />
-                </TouchableOpacity>
               </View>
 
               <View style={styles.userInfo}>
@@ -132,7 +128,6 @@ const Page = () => {
           </SectionCard>
         </View>
 
-        {/* Menu Items */}
         <View style={styles.menuContainer}>
           <Typography
             size={18}
@@ -199,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral50,
   },
   profileHeader: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.pastelGreen,
     paddingTop: 30,
     position: "relative",
     height: 160,
@@ -225,7 +220,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 60,
-    backgroundColor: colors.neutral50,
+    backgroundColor: colors.primary,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
@@ -260,19 +255,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 2,
     borderColor: colors.primary,
-  },
-  editImageButton: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    backgroundColor: colors.primary,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
   },
   userInfo: {
     flex: 1,

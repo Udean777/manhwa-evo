@@ -14,14 +14,14 @@ export const DetailRow = ({
 }) => (
   <View style={styles.detailRow}>
     <Typography
-      size={verticalScale(12)}
+      size={12}
       fontFamily={fonts.PoppinsBold}
       style={styles.detailLabel}
       color={colors.neutral800}
     >
       {label}
     </Typography>
-    <Typography size={verticalScale(12)} style={styles.detailValue}>
+    <Typography size={12} style={styles.detailValue}>
       {value}
     </Typography>
   </View>
@@ -33,10 +33,10 @@ export const AuthorArtist = ({
   manhwaDetail: ManhwaDetail | null;
 }) => (
   <SectionCard bgColor={colors.expense} title="Author & Artist">
-    <Typography size={verticalScale(12)} style={styles.author}>
+    <Typography size={12} style={styles.author}>
       Author: {manhwaDetail?.author}
     </Typography>
-    <Typography size={verticalScale(12)} style={styles.artist}>
+    <Typography size={12} style={styles.artist}>
       Artist: {manhwaDetail?.artist}
     </Typography>
   </SectionCard>
@@ -48,7 +48,7 @@ export const AlternativeTitles = ({
   manhwaDetail: ManhwaDetail | null;
 }) => (
   <SectionCard bgColor={colors.primary} title="Alternative Titles">
-    <Typography size={verticalScale(12)} style={styles.alternativeText}>
+    <Typography size={12} style={styles.alternativeText}>
       {manhwaDetail?.alternative}
     </Typography>
   </SectionCard>
@@ -59,8 +59,8 @@ export const Synopsis = ({
 }: {
   manhwaDetail: ManhwaDetail | null;
 }) => (
-  <SectionCard bgColor={colors.neutral200} title="Synopsis">
-    <Typography size={verticalScale(12)} style={styles.synopsis}>
+  <SectionCard bgColor={colors.pastelMint} title="Synopsis">
+    <Typography size={12} style={styles.synopsis}>
       {manhwaDetail?.synopsis}
     </Typography>
   </SectionCard>
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
   },
   artist: {},
   alternativeText: {
-    lineHeight: verticalScale(20),
+    lineHeight: 20,
   },
   synopsis: {
-    lineHeight: verticalScale(20),
+    lineHeight: 20,
   },
 });

@@ -17,15 +17,15 @@ const Genres = ({ manhwaDetail }: { manhwaDetail: ManhwaDetail | null }) => (
     <FlatList
       data={manhwaDetail?.genres}
       renderItem={({ item }) => (
-        <TouchableOpacity style={styles.genreBadge}>
+        <View style={styles.genreBadge}>
           <Typography
-            size={verticalScale(12)}
+            size={12}
             fontFamily={fonts.PoppinsMedium}
             style={styles.genreText}
           >
             {item.genreName}
           </Typography>
-        </TouchableOpacity>
+        </View>
       )}
       keyExtractor={(item) => item.genreName}
       horizontal
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacingY._7,
   },
   genreBadge: {
-    backgroundColor: colors.primaryLight,
+    backgroundColor: colors.pastelGreen,
     paddingHorizontal: spacingX._12,
     paddingVertical: spacingY._5,
     borderRadius: radius._15,

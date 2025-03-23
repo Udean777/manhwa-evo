@@ -51,7 +51,7 @@ const ManhwaCard = ({
 
         <View style={styles.contentContainer}>
           <Typography
-            size={scale(14)}
+            size={14}
             fontFamily={fonts.PoppinsBold}
             textProps={{ numberOfLines: 1, ellipsizeMode: "tail" }}
           >
@@ -60,14 +60,14 @@ const ManhwaCard = ({
 
           <View style={styles.infoContainer}>
             <View style={styles.chapterContainer}>
-              <Typography size={scale(12)} fontFamily={fonts.PoppinsSemiBold}>
+              <Typography size={12} fontFamily={fonts.PoppinsSemiBold}>
                 {latestChapter}
               </Typography>
             </View>
 
             <View style={styles.ratingContainer}>
               <Typography
-                size={scale(12)}
+                size={12}
                 color={colors.primary}
                 fontFamily={fonts.PoppinsSemiBold}
               >
@@ -82,7 +82,7 @@ const ManhwaCard = ({
             <View style={styles.buttonShadow} />
             <View style={styles.buttonContent}>
               <Typography
-                size={scale(12)}
+                size={12}
                 color={colors.neutral900}
                 fontFamily={fonts.PoppinsSemiBold}
               >
@@ -101,7 +101,7 @@ export default ManhwaCard;
 const styles = StyleSheet.create({
   cardContainer: {
     width: "45%",
-    marginBottom: verticalScale(20),
+    marginBottom: 20,
     position: "relative",
   },
   innerShadow: {
@@ -125,15 +125,15 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: verticalScale(150),
+    height: 150,
     borderRadius: scale(8),
     borderWidth: scale(2),
     borderColor: "#1a1a1a",
   },
   contentContainer: {
     gap: scale(5),
-    marginTop: verticalScale(10),
-    marginBottom: verticalScale(10),
+    marginTop: 10,
+    marginBottom: 10,
   },
   infoContainer: {
     flexDirection: "column",
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   chapterContainer: {
     backgroundColor: colors.primaryLight,
     paddingHorizontal: scale(6),
-    paddingVertical: verticalScale(2),
+    paddingVertical: 2,
     borderRadius: scale(4),
     borderWidth: scale(1),
     borderColor: "#1a1a1a",
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.neutral500,
     paddingHorizontal: scale(6),
-    paddingVertical: verticalScale(2),
+    paddingVertical: 2,
     borderRadius: scale(4),
     borderWidth: scale(1),
     borderColor: "#1a1a1a",
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 2,
     backgroundColor: colors.primary,
-    paddingVertical: verticalScale(8),
+    paddingVertical: 8,
     borderRadius: scale(8),
     alignItems: "center",
     justifyContent: "center",

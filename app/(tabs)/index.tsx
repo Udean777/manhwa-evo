@@ -76,7 +76,7 @@ export default function HomeScreen() {
             }}
           >
             <Typography
-              size={verticalScale(15)}
+              size={15}
               fontFamily={fonts.PoppinsBold}
               style={{
                 marginBottom: 5,
@@ -116,7 +116,7 @@ export default function HomeScreen() {
             }}
           >
             <Typography
-              size={verticalScale(15)}
+              size={15}
               fontFamily={fonts.PoppinsBold}
               style={{
                 marginBottom: 5,

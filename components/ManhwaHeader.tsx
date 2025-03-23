@@ -27,7 +27,7 @@ const ManhwaHeader = ({
       />
       <View style={styles.headerInfo}>
         <Typography
-          size={verticalScale(16)}
+          size={18}
           fontFamily={fonts.PoppinsBold}
           color={colors.neutral800}
           textProps={{ numberOfLines: 2, ellipsizeMode: "tail" }}
@@ -37,7 +37,7 @@ const ManhwaHeader = ({
         <View style={styles.ratingContainer}>
           <Icons.Star weight="fill" size={scale(16)} color="#FFD700" />
           <Typography
-            size={verticalScale(14)}
+            size={14}
             color={colors.neutral800}
             fontFamily={fonts.PoppinsSemiBold}
             style={styles.rating}
@@ -46,7 +46,7 @@ const ManhwaHeader = ({
           </Typography>
           <Typography
             color={colors.neutral800}
-            size={verticalScale(12)}
+            size={12}
             style={styles.followedBy}
           >
             {manhwaDetail?.followedBy}
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.neutral50,
+    backgroundColor: colors.green,
     paddingHorizontal: spacingX._7,
     paddingVertical: spacingY._5,
     borderRadius: radius._6,

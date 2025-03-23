@@ -9,7 +9,7 @@ const ModalLayout = () => {
       }}
     >
       <Stack.Screen
-        name="profile_modal"
+        name="edit_profile"
         options={{
           presentation: "modal",
         }}

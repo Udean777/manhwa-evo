@@ -16,7 +16,15 @@ const SectionCard = ({
   <View style={styles.container}>
     <View style={styles.innerShadow} />
     <View style={[styles.sectionCard, { backgroundColor: bgColor }]}>
-      {title && <Typography style={styles.sectionTitle}>{title}</Typography>}
+      {title && (
+        <Typography
+          fontFamily={fonts.PoppinsBold}
+          color={colors.neutral900}
+          style={styles.sectionTitle}
+        >
+          {title}
+        </Typography>
+      )}
       {children}
     </View>
   </View>
@@ -48,7 +56,6 @@ const styles = StyleSheet.create({
     borderColor: "#1a1a1a",
   },
   sectionTitle: {
-    color: "#333",
     marginBottom: spacingY._10,
   },
 });

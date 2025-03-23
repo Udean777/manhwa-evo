@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";
@@ -19,7 +25,7 @@ const PopularCard = ({ item: { rank, title, url, image } }: { item: any }) => {
 
   return (
     <Link href={`/manhwa/${getManhwaId(url)}`} asChild>
-      <TouchableOpacity style={styles.card}>
+      <Pressable style={styles.card}>
         <View style={styles.imageContainerWrapper}>
           <View style={styles.imageShadow} />
           <View style={styles.imageContainer}>
@@ -50,6 +56,8 @@ const PopularCard = ({ item: { rank, title, url, image } }: { item: any }) => {
         </View>
 
         <Typography
+          fontFamily={fonts.PoppinsBold}
+          size={14}
           textProps={{
             numberOfLines: 1,
             ellipsizeMode: "tail",
@@ -58,7 +66,7 @@ const PopularCard = ({ item: { rank, title, url, image } }: { item: any }) => {
         >
           {title}
         </Typography>
-      </TouchableOpacity>
+      </Pressable>
     </Link>
   );
 };
@@ -125,8 +133,6 @@ const styles = StyleSheet.create({
     borderColor: "#1a1a1a",
   },
   title: {
-    fontSize: 14,
-    fontFamily: fonts.PoppinsBold,
     marginTop: 8,
     width: 120,
   },

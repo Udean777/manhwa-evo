@@ -14,8 +14,20 @@ const ChapterItem = ({ item }: any) => {
     >
       <TouchableOpacity style={styles.chapterItem}>
         <View style={styles.chapterInfoContainer}>
-          <Typography style={styles.chapterTitle}>{item.chapterNum}</Typography>
-          <Typography style={styles.chapterDate}>{item.chapterDate}</Typography>
+          <Typography
+            fontFamily={fonts.PoppinsBold}
+            size={14}
+            color={colors.neutral800}
+          >
+            {item.chapterNum}
+          </Typography>
+          <Typography
+            fontFamily={fonts.PoppinsMedium}
+            size={11}
+            color={colors.neutral600}
+          >
+            {item.chapterDate}
+          </Typography>
         </View>
         <TouchableOpacity style={styles.downloadButton}>
           <Icons.CaretRight size={20} color={colors.neutral900} weight="bold" />
@@ -38,16 +50,6 @@ const styles = StyleSheet.create({
   },
   chapterInfoContainer: {
     flex: 1,
-  },
-  chapterTitle: {
-    fontSize: 14,
-    color: "#333",
-    fontFamily: fonts.PoppinsMedium,
-  },
-  chapterDate: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 2,
   },
   downloadButton: {
     padding: 8,

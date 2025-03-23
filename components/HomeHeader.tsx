@@ -5,19 +5,20 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import * as Icons from "phosphor-react-native";
 import { useAuth } from "@/context/authContext";
 import { Image } from "expo-image";
 import { getProfileImage } from "@/services/imageService";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { getGreeting } from "@/utils/common";
-import { colors, radius } from "@/constants/theme";
+import { colors, fonts, radius } from "@/constants/theme";
 import { scale } from "@/utils/style";
+import Typography from "./Typography";
 
 const HomeHeader = () => {
   const { user } = useAuth();
-  const router = useRouter();
 
   return (
     <View style={styles.headerContainer}>
@@ -32,31 +33,29 @@ const HomeHeader = () => {
             />
           </View>
           <View style={styles.textContainer}>
-            <Text style={styles.subtitle}>{getGreeting()}</Text>
-            <Text style={styles.username}>{user?.username}</Text>
+            <Typography style={styles.subtitle}>{getGreeting()}</Typography>
+            <Typography style={styles.username}>{user?.username}</Typography>
           </View>
         </View>
 
         <TouchableOpacity style={styles.iconButton}>
-          <Icons.Gear size={24} color="#333" />
+          <Icons.Moon weight="fill" size={24} color="#333" />
         </TouchableOpacity>
       </View>
 
-      {/* Search Bar with Shadow */}
       <View style={styles.searchBarContainer}>
         <View style={styles.searchBarShadow} />
-        <TouchableOpacity
-          onPress={() => router.push("/search_results")}
-          style={styles.searchBar}
-        >
-          <Icons.MagnifyingGlass size={20} color="#666" />
-          <TextInput
-            placeholder="Cari..."
-            style={styles.searchInput}
-            placeholderTextColor="#999"
-            editable={false}
-          />
-        </TouchableOpacity>
+        <Link href={"/search_results"} asChild>
+          <Pressable style={styles.searchBar}>
+            <Icons.MagnifyingGlass size={20} color="#666" />
+            <TextInput
+              placeholder="Cari..."
+              style={styles.searchInput}
+              placeholderTextColor="#999"
+              editable={false}
+            />
+          </Pressable>
+        </Link>
       </View>
     </View>
   );
@@ -66,7 +65,7 @@ export default HomeHeader;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     // paddingTop: 40,
     paddingBottom: 16,
     backgroundColor: "#fff",
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: fonts.PoppinsBold,
   },
   iconButton: {
     padding: 8,
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
     right: scale(-4),
     bottom: scale(-4),
     backgroundColor: colors.black,
-    borderRadius: radius._10,
+    borderRadius: 12,
     zIndex: 1,
   },
   searchBar: {

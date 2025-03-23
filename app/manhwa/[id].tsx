@@ -64,7 +64,7 @@ const Details = () => {
         <AlternativeTitles manhwaDetail={manhwaDetail} />
         <Synopsis manhwaDetail={manhwaDetail} />
         <Genres manhwaDetail={manhwaDetail} />
-        <SectionCard bgColor={colors.green}>
+        <SectionCard bgColor={colors.pastelTeal}>
           <ListChapter manhwaDetail={manhwaDetail} manhwaId={id} />
         </SectionCard>
       </ScrollView>
