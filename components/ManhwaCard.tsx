@@ -1,11 +1,18 @@
 import { StyleSheet, View, Pressable } from "react-native";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Image } from "expo-image";
 import Typography from "./Typography";
 import { colors, fonts } from "@/constants/theme";
 import { Link } from "expo-router";
 import { scale } from "@/utils/style";
 import { getManhwaId } from "@/utils/common";
+import { useAuth } from "@/context/authContext";
+import * as Icons from "phosphor-react-native";
+import {
+  addBookmark,
+  checkBookMark,
+  removeBookmark,
+} from "@/services/bookmarkService";
 
 const ManhwaCard = ({
   imageUrl,
@@ -13,13 +20,20 @@ const ManhwaCard = ({
   latestChapter,
   rating,
   link,
+  onBookmarkChange,
 }: {
   imageUrl: string;
   latestChapter: string;
   title: string;
   rating: string;
   link: string;
+  onBookmarkChange?: () => void;
 }) => {
+  const { user } = useAuth();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const manhwa = { imageUrl, title, latestChapter, rating, link };
+
   const backgroundColors = [
     colors.green,
     colors.pastelLavender,
@@ -32,6 +46,44 @@ const ManhwaCard = ({
     []
   );
 
+  const manhwaId = getManhwaId(link);
+
+  const fetchBookmarkStatus = useCallback(async () => {
+    if (user && manhwaId) {
+      await checkBookMark(user, manhwaId, setIsBookmarked);
+    }
+  }, [user, manhwaId]);
+
+  useEffect(() => {
+    fetchBookmarkStatus();
+  }, [fetchBookmarkStatus]);
+
+  const handleBookmarkPress = async () => {
+    if (!user || !manhwaId || isProcessing) return;
+
+    try {
+      setIsProcessing(true);
+
+      if (isBookmarked) {
+        const success = await removeBookmark(manhwaId);
+        if (success) {
+          setIsBookmarked(false);
+          if (onBookmarkChange) onBookmarkChange();
+        }
+      } else {
+        const success = await addBookmark(manhwa);
+        if (success) {
+          setIsBookmarked(true);
+          if (onBookmarkChange) onBookmarkChange();
+        }
+      }
+    } catch (error) {
+      console.error("Error handling bookmark: ", error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.innerShadow} />
@@ -43,6 +95,21 @@ const ManhwaCard = ({
           style={styles.image}
           contentFit={"cover"}
         />
+
+        <Pressable
+          style={[
+            styles.bookmarkButton,
+            isProcessing && styles.bookmarkButtonDisabled,
+          ]}
+          onPress={handleBookmarkPress}
+          disabled={isProcessing}
+        >
+          <Icons.BookmarkSimple
+            size={20}
+            color={colors.black}
+            weight={isBookmarked ? "fill" : "regular"}
+          />
+        </Pressable>
 
         <View style={styles.contentContainer}>
           <Typography
@@ -72,7 +139,7 @@ const ManhwaCard = ({
           </View>
         </View>
 
-        <Link href={`/manhwa/${getManhwaId(link)}`} asChild>
+        <Link href={`/manhwa/${manhwaId}`} asChild>
           <Pressable style={styles.actionButton}>
             <View style={styles.buttonShadow} />
             <View style={styles.buttonContent}>
@@ -178,5 +245,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: scale(2),
     borderColor: "#1a1a1a",
+  },
+  bookmarkButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "rgba(255,255,255,0.6)",
+    borderRadius: 20,
+    padding: 5,
+    zIndex: 3,
+  },
+  bookmarkButtonDisabled: {
+    opacity: 0.5,
   },
 });

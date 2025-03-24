@@ -23,7 +23,7 @@ export default function HomeScreen() {
     error: ongoingError,
   } = useFetchData<ManhwaOngoingProps[]>("/api/manhwa-ongoing");
 
-  // console.log(data);
+  console.log(JSON.stringify(ongoingManhwa, null, 2));
 
   if (isLoading || ongoingLoading) {
     return <Loading />;
