@@ -23,7 +23,7 @@ export default function HomeScreen() {
     error: ongoingError,
   } = useFetchData<ManhwaOngoingProps[]>("/api/manhwa-ongoing");
 
-  console.log(JSON.stringify(ongoingManhwa, null, 2));
+  // console.log(JSON.stringify(ongoingManhwa, null, 2));
 
   if (isLoading || ongoingLoading) {
     return <Loading />;
@@ -49,7 +49,6 @@ export default function HomeScreen() {
         >
           <HomeHeader />
 
-          {/* Segmented Control with Shadow */}
           <View style={styles.segmentContainer}>
             <View style={styles.segmentShadow} />
             <SegmentedControl

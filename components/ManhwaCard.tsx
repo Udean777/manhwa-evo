@@ -148,7 +148,7 @@ const ManhwaCard = ({
                 color={colors.neutral900}
                 fontFamily={fonts.PoppinsSemiBold}
               >
-                Baca Sekarang
+                Selengkapnya
               </Typography>
             </View>
           </Pressable>

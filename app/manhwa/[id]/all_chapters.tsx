@@ -23,7 +23,6 @@ import * as Icons from "phosphor-react-native";
 const AllChaptersScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const [filteredChapters, setFilteredChapters] = useState<any[]>([]);
 
   const backgroundColors = [
@@ -54,8 +53,6 @@ const AllChaptersScreen = () => {
   }, [chaptersData]);
 
   const handleSearch = () => {
-    setIsSearching(true);
-
     try {
       if (!searchQuery.trim()) {
         setFilteredChapters(chaptersData || []);
@@ -70,8 +67,6 @@ const AllChaptersScreen = () => {
       }
     } catch (error) {
       console.error("Search error:", error);
-    } finally {
-      setIsSearching(false);
     }
   };
 
@@ -177,7 +172,7 @@ const AllChaptersScreen = () => {
                 fontFamily={fonts.PoppinsMedium}
                 style={styles.emptyResultText}
               >
-                Tidak ada chapter yang sesuai dengan pencarian "{searchQuery}"
+                Tidak ada chapter yang sesuai dengan "{searchQuery}"
               </Typography>
             </View>
           }

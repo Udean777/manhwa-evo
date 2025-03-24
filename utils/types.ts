@@ -64,7 +64,6 @@ export type ManhwaOngoingProps = {
 };
 
 export interface ManhwaDetail {
-  id: string;
   title: string;
   imageSrc: string;
   rating: string;
